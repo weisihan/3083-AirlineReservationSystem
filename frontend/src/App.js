@@ -4,6 +4,7 @@ import Home from "./Router/Home/Home";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import ClientHome from "./Components/ClientHome";
+import StaffHome from "./Components/StaffHome";
 import ClientLog from "./Components/ClientLog";
 import ClientReg from "./Components/ClientReg";
 import StaffLog from "./Components/StaffLog";
@@ -55,6 +56,7 @@ function App() {
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/clienthome" element={<ClientHome />} />
+        <Route path="/staffhome" element={<StaffHome />} />
         <Route path="/" element={<RegisterLayout />}>
           <Route path="/register" element={<Register />} />
           <Route path="/staffreg" element={<StaffReg />} />

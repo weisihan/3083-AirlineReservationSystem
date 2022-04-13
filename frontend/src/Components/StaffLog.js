@@ -22,7 +22,7 @@ function StaffLog(props) {
     }
     // const res = await axios.post("http://localhost:3000/userlogin", details);
     // console.log(res); // backend stuff to be done
-    navigate("/login");
+    navigate("/staffhome");
   }
 
   return (
