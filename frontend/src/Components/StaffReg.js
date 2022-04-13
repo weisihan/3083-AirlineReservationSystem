@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import LoginForm from "./Login";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function StaffReg(props) {
   let navigate = useNavigate();
@@ -20,11 +21,22 @@ function StaffReg(props) {
         return;
       }
     }
-    // const res = await axios.post("http://localhost:3000/userlogin", details);
-    // console.log(res); // backend stuff to be done
+
+    const res = await axios.post("http://localhost:3000/log", details);
+    console.log(res); // backend stuff to be done
+
+    const data = await axios.get("http://localhost:3000/", details);
+    for (const item in data.data.staff) {
+      if (data.data.staff[item].username === details.username) {
+        alert("username already exists");
+        navigate("/staffreg");
+        return;
+      }
+    }
+    alert("Welcome!");
+    //push data to database
     navigate("/login");
   }
-
   return (
     <div className="card">
       <div className="actions">
