@@ -1,12 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
 function Login() {
-  // const [details, setDetails] = useState({
-  //   fname: "",
-  //   lname: "",
-  //   email: "",
-  //   password: "",
-  // });
 
   return (
     <div className="card">
