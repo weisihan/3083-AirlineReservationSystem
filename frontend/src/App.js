@@ -56,7 +56,6 @@ function LoginLayout() {
           </Link>{" "}
           <Link to="/stafflog">
             <button className="btn"> Staff </button>
-
           </Link>
         </Stack>
       </nav>
