@@ -32,4 +32,16 @@ app.post("/newclient", (req, res) => {
   res.send("newclient");
 });
 
+app.post("/newflight", (req, res) => {
+  console.log(req.body);
+  db.push("/flight", [req.body], false);
+  res.send("newflight");
+});
+
+app.post("/newairport", (req, res) => {
+  console.log(req.body);
+  db.push("/airport", [req.body], false);
+  res.send("newairport");
+});
+
 app.listen(3000, () => console.log("Server is listening to port 3000"));
