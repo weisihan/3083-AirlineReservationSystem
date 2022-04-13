@@ -22,22 +22,20 @@ function ClientReg(props) {
       }
     }
 
-    const res = await axios.post("http://localhost:3000/log", details);
-    console.log(res); // backend stuff to be done
-
     const data = await axios.get("http://localhost:3000/", details);
     for (const item in data.data.client) {
       if (data.data.client[item].email === details.email) {
         alert("Email already exists");
-        navigate("/clientreg");
         return;
       }
     }
+
+    const res = await axios.post("http://localhost:3000/newclient", details);
+    console.log(res); // backend stuff to be done
     alert("Welcome!");
     //push data to database
     navigate("/login");
   }
-
   return (
     <div className="card">
       <div className="actions">

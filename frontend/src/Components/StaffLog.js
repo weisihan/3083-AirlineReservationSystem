@@ -21,8 +21,8 @@ function StaffLog(props) {
         return;
       }
     }
-    const res = await axios.post("http://localhost:3000/log", details);
-    console.log(res); // backend stuff to be done
+    // const res = await axios.post("http://localhost:3000/log", details);
+    // console.log(res); // backend stuff to be done
 
     const data = await axios.get("http://localhost:3000/", details);
     for (const item in data.data.staff) {

@@ -20,10 +20,16 @@ app.get("/", (req, res) => {
   res.send(data);
 });
 
-// log in
-app.post("/log", (req, res) => {
+app.post("/newstaff", (req, res) => {
   console.log(req.body);
-  res.send("Hello, world");
+  db.push("/staff", [req.body], false);
+  res.send("newstaff");
+});
+
+app.post("/newclient", (req, res) => {
+  console.log(req.body);
+  db.push("/client", [req.body], false);
+  res.send("newclient");
 });
 
 app.listen(3000, () => console.log("Server is listening to port 3000"));
