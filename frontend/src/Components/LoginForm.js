@@ -14,8 +14,6 @@ function LoginForm() {
     password: "",
   });
 
-  function NewRegister() {}
-
   async function Signin() {
     for (const item in details) {
       if (details[item] === "") {
@@ -74,7 +72,7 @@ function LoginForm() {
       </div>
       <br></br>
       <div>
-        <Link to="/">
+        <Link to="/home">
           <button className="btn" onClick={Home}>
             {" "}
             Homepage{" "}
@@ -85,10 +83,7 @@ function LoginForm() {
           Sign in{" "}
         </button>
         <Link to="/register">
-          <button className="btn" onClick={NewRegister}>
-            {" "}
-            Register{" "}
-          </button>
+          <button className="btn"> Register </button>
         </Link>
       </div>
     </div>
