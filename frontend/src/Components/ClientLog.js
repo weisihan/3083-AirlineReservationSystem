@@ -76,16 +76,16 @@ function ClientLog(props) {
           />
         </div>
         <br></br>
+        <button className="btn" onClick={LoggedIn}>
+          {" "}
+          Login{" "}
+        </button>
         <Link to="/home">
           <button className="btn" onClick={Home}>
             {" "}
             Go back to homepage{" "}
           </button>
         </Link>
-        <button className="btn" onClick={LoggedIn}>
-          {" "}
-          Login{" "}
-        </button>
       </div>
     </div>
   );
