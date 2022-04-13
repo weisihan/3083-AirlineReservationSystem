@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Home from "../Router/Home/Home";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function ClientLog(props) {
   let navigate = useNavigate();
@@ -20,9 +21,21 @@ function ClientLog(props) {
         return;
       }
     }
-    // const res = await axios.post("http://localhost:3000/userlogin", details);
-    // console.log(res); // backend stuff to be done
-    navigate("/clienthome");
+
+    const res = await axios.post("http://localhost:3000/log", details);
+    console.log(res); // backend stuff to be done
+
+    const data = await axios.get("http://localhost:3000/", details);
+    for (const item in data.data.client) {
+      if (data.data.client[item].email === details.email) {
+        if (data.data.client[item].password === details.password) {
+          alert("Login successful");
+          navigate("/clienthome");
+          return;
+        }
+      }
+    }
+    alert("Invalid email or password");
   }
 
   return (
@@ -88,7 +101,6 @@ function ClientLog(props) {
             Go back to homepage{" "}
           </button>
         </Link>
-
       </div>
     </div>
   );

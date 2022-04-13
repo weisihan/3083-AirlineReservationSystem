@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Home from "../Router/Home/Home";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function StaffLog(props) {
   let navigate = useNavigate();
@@ -20,9 +21,20 @@ function StaffLog(props) {
         return;
       }
     }
-    // const res = await axios.post("http://localhost:3000/userlogin", details);
-    // console.log(res); // backend stuff to be done
-    navigate("/staffhome");
+    const res = await axios.post("http://localhost:3000/log", details);
+    console.log(res); // backend stuff to be done
+
+    const data = await axios.get("http://localhost:3000/", details);
+    for (const item in data.data.staff) {
+      if (data.data.staff[item].username === details.username) {
+        if (data.data.staff[item].password === details.password) {
+          alert("Login successful");
+          navigate("/staffhome");
+          return;
+        }
+      }
+    }
+    alert("Invalid username or password");
   }
 
   return (
