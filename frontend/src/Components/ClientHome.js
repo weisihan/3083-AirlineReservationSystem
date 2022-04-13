@@ -30,6 +30,7 @@ function ClientHome() {
         </Link>
         <Link to="/home">
           <button className="btn--alt">Logout</button>
+
         </Link>
       </div>
     </div>

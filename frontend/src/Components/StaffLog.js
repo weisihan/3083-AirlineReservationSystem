@@ -82,6 +82,7 @@ function StaffLog(props) {
           {" "}
           Login{" "}
         </button>
+
         <Link to="/home">
           <button className="btn" onClick={Home}>
             {" "}
