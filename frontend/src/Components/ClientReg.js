@@ -77,16 +77,16 @@ function ClientReg(props) {
           />
         </div>
         <br></br>
+        <button className="btn" onClick={Registered}>
+          {" "}
+          Register{" "}
+        </button>
         <Link to="/home">
           <button className="btn" onClick={LoginForm}>
             {" "}
             Go back to homepage{" "}
           </button>
         </Link>
-        <button className="btn" onClick={Registered}>
-          {" "}
-          Register{" "}
-        </button>
       </div>
     </div>
   );
