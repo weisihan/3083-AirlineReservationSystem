@@ -56,7 +56,13 @@ function LoginLayout() {
           </Link>{" "}
           <Link to="/stafflog">
             <button className="btn"> Staff </button>
-
+          </Link>
+        </Stack>
+      </nav>
+      <div className="content"></div>
+      <Outlet />
+    </div>
+  );
 }
 function App() {
   return (
@@ -65,13 +71,11 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/clienthome" element={<ClientHome />} />
         <Route path="/staffhome" element={<StaffHome />} />
-          
         <Route path="/myflights" element={<MyFlights />} />
         <Route path="/searchflights" element={<SearchFlights />} />
         <Route path="/purchaseticket" element={<PurchaseTicket />} />
         <Route path="/review" element={<Review />} />
         <Route path="/trackspending" element={<TrackSpending />} />
-
         <Route path="/viewflights" element={<ViewFlights />} />
         <Route path="/newflight" element={<NewFlight />} />
         <Route path="/changestatus" element={<ChangeStatus />} />
@@ -79,7 +83,19 @@ function App() {
         <Route path="/newairport" element={<NewAirport />} />
         <Route path="/viewfeedback" element={<ViewFeedback />} />
         <Route path="/viewreport" element={<ViewReport />} />
-)
+        <Route path="/" element={<RegisterLayout />}>
+          <Route path="/register" element={<Register />} />
+          <Route path="/staffreg" element={<StaffReg />} />
+          <Route path="/clientreg" element={<ClientReg />} />
+        </Route>
+        <Route path="/" element={<LoginLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/stafflog" element={<StaffLog />} />
+          <Route path="/clientlog" element={<ClientLog />} />
+        </Route>
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
