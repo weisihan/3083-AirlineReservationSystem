@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import LoginForm from "./LoginForm";
+import LoginForm from "./Login";
+import { useNavigate } from "react-router-dom";
 
 function StaffReg(props) {
+  let navigate = useNavigate();
+
   const [details, setDetails] = useState({
     fname: "",
     lname: "",
@@ -19,7 +22,7 @@ function StaffReg(props) {
     }
     // const res = await axios.post("http://localhost:3000/userlogin", details);
     // console.log(res); // backend stuff to be done
-    // navigate("/clienthome");
+    navigate("/login");
   }
 
   return (
@@ -75,10 +78,10 @@ function StaffReg(props) {
           />
         </div>
         <br></br>
-        <Link to="/login">
+        <Link to="/home">
           <button className="btn" onClick={LoginForm}>
             {" "}
-            Go back to login{" "}
+            Go back to homepage{" "}
           </button>
         </Link>
         <button className="btn" onClick={Registered}>
