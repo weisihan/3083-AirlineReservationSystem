@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import LoginForm from "./Login";
+import Home from "../Router/Home/Home";
 import { useNavigate } from "react-router-dom";
 
-function ClientReg(props) {
+function StaffLog(props) {
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({
     fname: "",
     lname: "",
-    email: "",
+    username: "",
     password: "",
   });
 
-  async function Registered() {
+  async function LoggedIn() {
     for (const item in details) {
       if (details[item] === "") {
         alert("Please fill in all the fields");
@@ -22,14 +22,13 @@ function ClientReg(props) {
     }
     // const res = await axios.post("http://localhost:3000/userlogin", details);
     // console.log(res); // backend stuff to be done
-
-    navigate("/login");
+    navigate("/staffhome");
   }
 
   return (
     <div className="card">
       <div className="actions">
-        <h2>Registering as a client</h2>
+        <h2>Logging in as a staff</h2>
         <div className="form-inner">
           <div className="form-group">
             <label htmlFor="fname"> First Name: </label>
@@ -55,13 +54,15 @@ function ClientReg(props) {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="email"> Email: </label>
+          <label htmlFor="username"> Username: </label>
           <input
             type="text"
-            name="email"
-            id="email"
-            onChange={(e) => setDetails({ ...details, email: e.target.value })}
-            value={details.email}
+            name="username"
+            id="username"
+            onChange={(e) =>
+              setDetails({ ...details, username: e.target.value })
+            }
+            value={details.username}
           />
         </div>
         <div className="form-group">
@@ -78,18 +79,18 @@ function ClientReg(props) {
         </div>
         <br></br>
         <Link to="/home">
-          <button className="btn" onClick={LoginForm}>
+          <button className="btn" onClick={Home}>
             {" "}
             Go back to homepage{" "}
           </button>
         </Link>
-        <button className="btn" onClick={Registered}>
+        <button className="btn" onClick={LoggedIn}>
           {" "}
-          Register{" "}
+          Login{" "}
         </button>
       </div>
     </div>
   );
 }
 
-export default ClientReg;
+export default StaffLog;
