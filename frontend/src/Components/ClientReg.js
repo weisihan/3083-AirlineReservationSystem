@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import LoginForm from "./Login";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function ClientReg(props) {
   let navigate = useNavigate();
@@ -20,9 +21,20 @@ function ClientReg(props) {
         return;
       }
     }
-    // const res = await axios.post("http://localhost:3000/userlogin", details);
-    // console.log(res); // backend stuff to be done
 
+    const res = await axios.post("http://localhost:3000/log", details);
+    console.log(res); // backend stuff to be done
+
+    const data = await axios.get("http://localhost:3000/", details);
+    for (const item in data.data.client) {
+      if (data.data.client[item].email === details.email) {
+        alert("Email already exists");
+        navigate("/clientreg");
+        return;
+      }
+    }
+    alert("Welcome!");
+    //push data to database
     navigate("/login");
   }
 
