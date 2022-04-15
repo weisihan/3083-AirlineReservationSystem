@@ -44,4 +44,11 @@ app.post("/newairport", (req, res) => {
   res.send("newairport");
 });
 
+// push data to front end
+app.get("/staff", (req, res) => {
+  console.log("get");
+  var data = db.getData("/staff");
+  res.send(data);
+});
+
 app.listen(3000, () => console.log("Server is listening to port 3000"));
