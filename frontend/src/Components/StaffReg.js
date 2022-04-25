@@ -22,8 +22,7 @@ function StaffReg(props) {
       }
     }
 
-
-    const data = await axios.get("http://localhost:3000/", details);
+    const data = await axios.get("http://localhost:3001/", details);
     for (const item in data.data.staff) {
       if (data.data.staff[item].username === details.username) {
         alert("username already exists");
@@ -31,7 +30,7 @@ function StaffReg(props) {
       }
     }
 
-    const res = await axios.post("http://localhost:3000/newstaff", details);
+    const res = await axios.post("http://localhost:3001/newstaff", details);
     console.log(res); // backend stuff to be done
 
     alert("Welcome!");

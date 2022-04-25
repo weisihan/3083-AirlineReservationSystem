@@ -22,10 +22,10 @@ function ClientLog(props) {
       }
     }
 
-    // const res = await axios.post("http://localhost:3000/log", details);
+    // const res = await axios.post("http://localhost:3001/log", details);
     // console.log(res); // backend stuff to be done
 
-    const data = await axios.get("http://localhost:3000/", details);
+    const data = await axios.get("http://localhost:3001/", details);
     for (const item in data.data.client) {
       if (data.data.client[item].email === details.email) {
         if (data.data.client[item].password === details.password) {

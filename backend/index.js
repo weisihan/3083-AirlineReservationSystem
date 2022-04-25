@@ -20,6 +20,18 @@ app.get("/", (req, res) => {
   res.send(data);
 });
 
+app.post("/stafflogin", (req, res) => {
+  console.log("post");
+  console.log(req.body.username);
+  console.log(req.body.password);
+
+  var data = db.getData("/staff");
+  res.send(data);
+
+  // res.send(true);
+  // res.send(false);
+});
+
 app.post("/newstaff", (req, res) => {
   console.log(req.body);
   db.push("/staff", [req.body], false);
@@ -44,4 +56,4 @@ app.post("/newairport", (req, res) => {
   res.send("newairport");
 });
 
-app.listen(3000, () => console.log("Server is listening to port 3000"));
+app.listen(3001, () => console.log("Server is listening to port 3000"));
