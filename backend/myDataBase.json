@@ -33,7 +33,8 @@
             "flightnum": "MF845",
             "departairport": "XMN",
             "arriveairport": "SEA",
-            "company": "Xiamen Airlines"
+            "company": "Xiamen Airlines",
+            "passenger": []
         }
     ],
     "airport": [

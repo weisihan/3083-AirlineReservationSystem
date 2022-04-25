@@ -22,7 +22,7 @@ function ClientReg(props) {
       }
     }
 
-    const data = await axios.get("http://localhost:3000/", details);
+    const data = await axios.get("http://localhost:3001/", details);
     for (const item in data.data.client) {
       if (data.data.client[item].email === details.email) {
         alert("Email already exists");
@@ -30,7 +30,7 @@ function ClientReg(props) {
       }
     }
 
-    const res = await axios.post("http://localhost:3000/newclient", details);
+    const res = await axios.post("http://localhost:3001/newclient", details);
     console.log(res); // backend stuff to be done
     alert("Welcome!");
     //push data to database

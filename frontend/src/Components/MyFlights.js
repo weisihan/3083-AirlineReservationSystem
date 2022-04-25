@@ -3,6 +3,24 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 function MyFlights() {
+  const [details, setDetails] = useState({
+    fname: "",
+    lname: "",
+    email: "",
+  });
+
+  // get client's email
+
+  // const data = await axios.get("http://localhost:3001/", details);
+  // for (const item in data.data.flight) {
+  //   for (const email in data.data.flight[item].passenger) {
+  //     if (email === details.email) {
+  //       // display the flight details
+  //     }
+  //       return;
+  //     }
+  //   }
+
   return (
     <div className="card">
       <h1>My flights </h1>
