@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import Home from "./Router/Home/Home";
 import Login from "./Components/Login";
+import Logout from "./Components/Logout";
 import Register from "./Components/Register";
 import ClientHome from "./Components/ClientHome";
 import StaffHome from "./Components/StaffHome";
@@ -26,6 +27,8 @@ import ViewReport from "./Components/ViewReport";
 
 import { Outlet } from "react-router-dom";
 import Stack from "@mui/material/Stack";
+
+import AuthService from "./auth-service";
 
 function RegisterLayout() {
   return (
@@ -71,6 +74,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/clienthome" element={<ClientHome />} />
         <Route path="/staffhome" element={<StaffHome />} />
+        <Route path="/logout" element={<Logout />} />
 
         <Route path="/myflights" element={<MyFlights />} />
         <Route path="/searchflights" element={<SearchFlights />} />
