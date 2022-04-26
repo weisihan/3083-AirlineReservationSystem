@@ -22,6 +22,7 @@ function ClientLog(props) {
       }
     }
 
+
     const resBody = await axios.post(
       "http://localhost:3001/clientlogin",
       details
@@ -32,6 +33,7 @@ function ClientLog(props) {
       navigate("/clienthome");
     } else {
       alert("wrong username or password");
+
     }
   }
 

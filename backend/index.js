@@ -64,6 +64,7 @@ app.post("/clientlogin", (req, res) => {
   }
   console.log("Invalid username or password");
   res.send(false);
+
 });
 
 app.post("/newstaff", (req, res) => {
@@ -90,6 +91,7 @@ app.post("/newairport", (req, res) => {
   res.send("newairport");
 });
 
+
 app.post("/logout", (req, res) => {
   console.log("logout");
   currUser = "";
@@ -114,5 +116,6 @@ app.post("/clientcheck", (req, res) => {
     res.send("false");
   }
 });
+
 
 app.listen(3001, () => console.log("Server is listening to port 3000"));

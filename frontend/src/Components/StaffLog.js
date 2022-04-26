@@ -28,7 +28,9 @@ function StaffLog(props) {
     );
     const res = resBody.data;
     if (res) {
+
       console.log("you are logged in");
+
       navigate("/staffhome");
     } else {
       alert("wrong username or password");
