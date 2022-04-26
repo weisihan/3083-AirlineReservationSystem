@@ -67,6 +67,7 @@ function LoginLayout() {
     </div>
   );
 }
+
 function App() {
   return (
     <div>

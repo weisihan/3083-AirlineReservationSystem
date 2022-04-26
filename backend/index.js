@@ -102,18 +102,18 @@ app.post("/logout", (req, res) => {
 app.post("/staffcheck", (req, res) => {
   console.log(currRole);
   if (currRole == "staff") {
-    res.send("true");
+    res.send(true);
   } else {
-    res.send("false");
+    res.send(false);
   }
 });
 
 app.post("/clientcheck", (req, res) => {
   console.log(currRole);
   if (currRole == "client") {
-    res.send("true");
+    res.send(true);
   } else {
-    res.send("false");
+    res.send(false);
   }
 });
 
