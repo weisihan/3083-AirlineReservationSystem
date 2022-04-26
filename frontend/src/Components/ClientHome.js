@@ -20,6 +20,7 @@ function ClientHome() {
 
   async function getStatus() {
     const resBody = await axios.post("http://localhost:3001/clientcheck");
+
     const res = resBody.data;
     if (res === true) {
       console.log("logged in");
@@ -72,8 +73,8 @@ function ClientHome() {
           <button className="btn--alt"> Logout </button>
         </Link>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default ClientHome;
