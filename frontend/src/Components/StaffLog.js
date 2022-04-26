@@ -21,10 +21,6 @@ function StaffLog(props) {
         return;
       }
     }
-    // const res = await axios.post("http://localhost:3001/log", details);
-    // console.log(res); // backend stuff to be done
-
-    // const data = await axios.get("http://localhost:3001/", details);
 
     const resBody = await axios.post(
       "http://localhost:3001/stafflogin",
@@ -32,21 +28,11 @@ function StaffLog(props) {
     );
     const res = resBody.data;
     if (res) {
-      console.log("you are login");
+      console.log("you are logged in");
       navigate("/staffhome");
     } else {
       alert("wrong username or password");
     }
-    // for (const item in data.data.staff) {
-    //   if (data.data.staff[item].username === details.username) {
-    //     if (data.data.staff[item].password === details.password) {
-    //      alert("Login successful");
-    //       navigate("/staffhome");
-    //       return;
-    //     }
-    //   }
-    // }
-    // alert("Invalid username or password");
   }
 
   return (
