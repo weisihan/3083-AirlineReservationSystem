@@ -11,6 +11,7 @@ const { Config } = require("node-json-db/dist/lib/JsonDBConfig");
 var db = new JsonDB(new Config("myDataBase", true, false, "/"));
 var currUser = ""; // username
 var currRole = ""; //staff or client
+var currComp = ""; // staff's company
 
 const app = express();
 app.use(cors());
@@ -36,6 +37,7 @@ app.post("/stafflogin", (req, res) => {
         res.send(true);
         currUser = req.body.username;
         currRole = "staff";
+        currComp = req.body.company;
         return;
       }
     }
@@ -64,7 +66,6 @@ app.post("/clientlogin", (req, res) => {
   }
   console.log("Invalid username or password");
   res.send(false);
-
 });
 
 app.post("/newstaff", (req, res) => {
@@ -91,7 +92,6 @@ app.post("/newairport", (req, res) => {
   res.send("newairport");
 });
 
-
 app.post("/logout", (req, res) => {
   console.log("logout");
   currUser = "";
@@ -116,6 +116,5 @@ app.post("/clientcheck", (req, res) => {
     res.send(false);
   }
 });
-
 
 app.listen(3001, () => console.log("Server is listening to port 3000"));
