@@ -82,7 +82,7 @@ function StaffHome() {
           <button className="btn--alt">Logout </button>
         </Link>
       </div>
-    );
-  }
+    </div>
+  );
 }
 export default StaffHome;
