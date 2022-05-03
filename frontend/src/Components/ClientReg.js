@@ -23,8 +23,10 @@ function ClientReg(props) {
     }
 
     const data = await axios.get("http://localhost:3001/", details);
+    console.log("detials", details);
     for (const item in data.data.client) {
       if (data.data.client[item].email === details.email) {
+        console.log("email", details.email);
         alert("Email already exists");
         return;
       }
