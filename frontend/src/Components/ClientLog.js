@@ -22,18 +22,26 @@ function ClientLog(props) {
       }
     }
 
+    let general = await axios.all([
+      await axios.post("http://localhost:3001/clientlogin", details),
+      await axios.post("http://localhost:3001/clientFlightBack", details),
+    ]);
+    console.log("general", general);
+    const resBody = general[0];
+    // const forFlight = await axios.post(
+    //   "http://localhost:3001/clientFlightBack",
+    //   details
+    // );
+    // );
 
-    const resBody = await axios.post(
-      "http://localhost:3001/clientlogin",
-      details
-    );
+    console.log("detailsLog", details);
     const res = resBody.data;
-    if (res) {
+    console.log("res", res);
+    if (res != false) {
       console.log("you are logged in");
       navigate("/clienthome");
     } else {
       alert("wrong username or password");
-
     }
   }
 

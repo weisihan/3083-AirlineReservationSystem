@@ -52,22 +52,26 @@ function ClientHome() {
         <Link to="/myflights">
           <button className="btn">View my flights</button>
         </Link>
+        <br></br>
+        <br></br>
         <Link to="/searchflights">
-          <button className="btn">Search for flights</button>
+          <button className="btn">
+            Search for flights/Purchase Flights/Reivew Flights
+          </button>
         </Link>
         <br></br>
         <br></br>
-        <Link to="/purchaseticket">
+        {/* <Link to="/purchaseticket">
           <button className="btn">Purchase ticket</button>
-        </Link>
-        <Link to="/review">
+        </Link> */}
+        {/* <Link to="/review">
           <button className="btn">Review</button>
-        </Link>
-        <br></br>
-        <br></br>
+        </Link> */}
         <Link to="/trackspending">
           <button className="btn">Track spending</button>
         </Link>
+        <br></br>
+        <br></br>
         <Link to="/logout">
           <button className="btn--alt"> Logout </button>
         </Link>
