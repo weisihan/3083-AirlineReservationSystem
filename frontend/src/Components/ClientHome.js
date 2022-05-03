@@ -1,9 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import Home from "../Router/Home/Home";
+import { useNavigate } from "react-router-dom";
+
+// async function getUser() {
+//   const resBody = await axios.post("http://localhost:3001/clienthome");
+//   const res = resBody.data;
+//   if (!res) {
+//     alert("you are not logged in");
+//     return false;
+//   }
+// }
 
 function ClientHome() {
+  let navigate = useNavigate();
+  const [details, setDetails] = useState({
+    status: "",
+  });
+
+  async function getStatus() {
+    const resBody = await axios.post("http://localhost:3001/clientcheck");
+    const res = resBody.data;
+    if (res === true) {
+      console.log("logged in");
+      details.status = "true";
+    } else {
+      alert("you are not logged in");
+      console.log("navigating to home");
+      navigate("/home");
+      details.status = "false";
+    }
+  }
+
+  useEffect(() => {
+    if (details.status === "") {
+      getStatus();
+    }
+  });
+
+  useEffect(() => {
+    if (details.status === "false") {
+      navigate("/home");
+    }
+  });
+
   return (
     <div className="card">
       <h1>Client Homepage </h1>
@@ -28,9 +68,8 @@ function ClientHome() {
         <Link to="/trackspending">
           <button className="btn">Track spending</button>
         </Link>
-        <Link to="/home">
-          <button className="btn--alt">Logout</button>
-
+        <Link to="/logout">
+          <button className="btn--alt"> Logout </button>
         </Link>
       </div>
     </div>

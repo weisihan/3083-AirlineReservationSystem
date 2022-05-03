@@ -1,9 +1,52 @@
 
-{"staff":[{"fname":"Silvia","lname":"Wei","username":"sw4293","password":"12345"},
-    {"fname":"Sihan","lname":"Wei","username":"sihanwei","password":"12345"}],
-"client":[{"fname":"Silvia","lname":"Wei","email":"sw4293@nyu.edu","password":"12345"},
-        {"fname":"Sihan","lname":"Wei","email":"wshn420@gmail.com","password":"12345"}],
-"flight":[{"flightnum":"MF845","departairport":"XMN","arriveairport":"SEA","company":"Xiamen Airlines"}],
-"airport":[{"code":"XMN","name":"Xiamen Gaoqi International Airport"},
-            {"code":"SEA","name":"Seattle Tacoma"}]}
+
+{
+    "staff": [
+        {
+            "fname": "Silvia",
+            "lname": "Wei",
+            "username": "sw4293",
+            "password": "12345"
+        },
+        {
+            "fname": "Sihan",
+            "lname": "Wei",
+            "username": "sihanwei",
+            "password": "12345"
+        }
+    ],
+    "client": [
+        {
+            "fname": "Silvia",
+            "lname": "Wei",
+            "email": "sw4293@nyu.edu",
+            "password": "12345"
+        },
+        {
+            "fname": "Sihan",
+            "lname": "Wei",
+            "email": "wshn420@gmail.com",
+            "password": "12345"
+        }
+    ],
+    "flight": [
+        {
+            "flightnum": "MF845",
+            "departairport": "XMN",
+            "arriveairport": "SEA",
+            "company": "Xiamen Airlines",
+            "passenger": []
+        }
+    ],
+    "airport": [
+        {
+            "code": "XMN",
+            "name": "Xiamen Gaoqi International Airport"
+        },
+        {
+            "code": "SEA",
+            "name": "Seattle Tacoma International Airport"
+        }
+    ]
+}
 

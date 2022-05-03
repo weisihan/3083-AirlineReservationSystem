@@ -21,21 +21,20 @@ function StaffLog(props) {
         return;
       }
     }
-    // const res = await axios.post("http://localhost:3000/log", details);
-    // console.log(res); // backend stuff to be done
 
+    const resBody = await axios.post(
+      "http://localhost:3001/stafflogin",
+      details
+    );
+    const res = resBody.data;
+    if (res) {
 
-    const data = await axios.get("http://localhost:3000/", details);
-    for (const item in data.data.staff) {
-      if (data.data.staff[item].username === details.username) {
-        if (data.data.staff[item].password === details.password) {
-          alert("Login successful");
-          navigate("/staffhome");
-          return;
-        }
-      }
+      console.log("you are logged in");
+
+      navigate("/staffhome");
+    } else {
+      alert("wrong username or password");
     }
-    alert("Invalid username or password");
   }
 
   return (

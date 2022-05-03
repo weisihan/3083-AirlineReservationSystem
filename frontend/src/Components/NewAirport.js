@@ -19,7 +19,7 @@ function NewFlight() {
       }
     }
 
-    const data = await axios.get("http://localhost:3000/", details);
+    const data = await axios.get("http://localhost:3001/", details);
     for (const item in data.data.airport) {
       if (data.data.airport[item].code === details.code) {
         alert("Airport already exists");
@@ -27,7 +27,8 @@ function NewFlight() {
       }
     }
 
-    const res = await axios.post("http://localhost:3000/newairport", details);
+    const res = await axios.post("http://localhost:3001/newairport", details);
+
     console.log(res);
     alert("Successfully added");
     navigate("/staffhome");

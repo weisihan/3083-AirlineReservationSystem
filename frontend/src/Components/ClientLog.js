@@ -22,20 +22,19 @@ function ClientLog(props) {
       }
     }
 
-    // const res = await axios.post("http://localhost:3000/log", details);
-    // console.log(res); // backend stuff to be done
 
-    const data = await axios.get("http://localhost:3000/", details);
-    for (const item in data.data.client) {
-      if (data.data.client[item].email === details.email) {
-        if (data.data.client[item].password === details.password) {
-          alert("Login successful");
-          navigate("/clienthome");
-          return;
-        }
-      }
+    const resBody = await axios.post(
+      "http://localhost:3001/clientlogin",
+      details
+    );
+    const res = resBody.data;
+    if (res) {
+      console.log("you are logged in");
+      navigate("/clienthome");
+    } else {
+      alert("wrong username or password");
+
     }
-    alert("Invalid email or password");
   }
 
   return (
