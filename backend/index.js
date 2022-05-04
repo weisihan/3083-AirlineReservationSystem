@@ -294,7 +294,7 @@ app.post("/clientcancel", (req, res) => {
           WHERE Purchase.ticket_id = ?
           `,
           [rows[0].ID],
-          console.log("hi", rows[0].ID),
+
           (err, rows) => {
             if (!err) {
               res.send({
@@ -443,14 +443,35 @@ app.post("/newstaff", (req, res) => {
   res.send("newstaff");
 });
 app.post("/money", (req, res) => {
-  let moneyArray = [];
-  var data = db.getData("/");
-  for (const item in data.ticket) {
-    if (data.ticket[item].userEmail == req.body.email) {
-      moneyArray.push(data.ticket[item].price);
+  console.log("money", req.body);
+  connection.query(
+    `SELECT *
+    FROM Ticket
+    WHERE ID IN (
+      SELECT Ticket.ID
+      FROM Ticket
+      WHERE Ticket.ID IN (
+        SELECT Purchase.ticket_id
+        FROM Purchase
+        WHERE Purchase.email = ? 
+      )
+    )
+    AND purchase_date BETWEEN ? AND ?`,
+    [req.body.email, req.body.start_date, req.body.end_date],
+    (err, rows) => {
+      if (!err) {
+        let monthA = [];
+        let start = parseInt(req.body.start_date.split("T")[0].split("-")[1]);
+        let end = parseInt(req.body.end_date.split("T")[0].split("-")[1]);
+        for (let i = start; i <= end; i++) {
+          monthA.push(i);
+        }
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
     }
-  }
-  res.send(moneyArray);
+  );
 });
 
 app.post("/newclient", (req, res) => {

@@ -1,60 +1,117 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/user.context";
+import Table from "./Table.component";
 // import {Bar} from 'react-chartjs-2';
 
 function TrackSpending() {
-  const [details, setDetails] = useState({
-    email: "",
-  });
-  async function track() {
-    const sendUserEmail = await axios.post(
-      "http://localhost:3001/clientFlightBack"
-    );
-    details.email = sendUserEmail.data;
-    console.log("trackEmail", details.email);
-    const trackMoney = await axios.post("http://localhost:3001/money", details);
-    // let money = trackMoney.data;
-    // let x = ['month1','month2','month3','month4','month5','month6'];
-    // let y = [trackMoney.data[0],trackMoney.data[1],trackMoney.data[2],trackMoney.data[3],trackMoney.data[4],trackMoney.data[5]];
-    // let myChart = new Chart(document.getElementById("myChart"),{
-    //   type:"bar",
-    //   data:{
-    //     lables:x,
-    //     datasets:[{
-    //     data: "your payment"
-    //   }]
-    //   },
-
-    // options:{
-    //   legend:{display:false},
-    //   title:{
-    //     display:true,
-    //     text:"your result"
-    //   }
-    //   }
-    // });
-    // var data=[
-    //   {
-    //     type:'bar',
-    //     data:data,
-    //     x:['month1','month2','month3','month4','month5','month6'],
-    //     y:[trackMoney.data[0],trackMoney.data[1],trackMoney.data[2],trackMoney.data[3],trackMoney.data[4],trackMoney.data[5]],
-    //     type:'bar'
-    //   }
-    // ];
+  function handleEvent(event) {
+    console.log("targetname", event.target.name);
+    setDetails({ ...formDetails, [event.target.name]: event.target.value });
+    console.log(formDetails);
   }
+  const { currentUser } = useContext(UserContext);
 
-  // track();
+  const [formDetails, setDetails] = useState({
+    start_date: "",
+    end_date: "",
+    email: currentUser,
+  });
+  const [foundFlights, setFlights] = useState([]);
+  let monthA = [];
+  let nowDate = new Date();
+  async function sendRequest(formDetails) {
+    console.log("formdetails", formDetails);
+    let res = await axios.post("http://localhost:3001/money", formDetails);
+    res = res.data;
+    console.log("newres", res);
+    let aggregated = [];
+    let start;
+    let end;
+    if (formDetails.start_date == "" && formDetails.end_date == "") {
+      console.log("yes");
+      end = nowDate.getMonth() + 1;
+      start = end - 5;
+      if (start <= 0) {
+        if (start == 0) {
+          start = 12;
+        } else {
+          start = 12 + start;
+        }
+      }
+      console.log("month", start);
+    } else {
+      console.log("no");
+      start = parseInt(formDetails.start_date.split("T")[0].split("-")[1]);
+      end = parseInt(formDetails.end_date.split("T")[0].split("-")[1]);
+    }
+    if (start > end) {
+      for (let i = start; i <= 12; i++) {
+        monthA.push(i);
+      }
+      for (let j = 1; j <= end; j++) {
+        monthA.push(j);
+      }
+    } else {
+      for (let i = start; i <= end; i++) {
+        monthA.push(i);
+      }
+    }
+
+    console.log(monthA);
+    for (let j = 0; j < monthA.length; j++) {
+      let monthSpend = 0;
+      for (let i = 0; i < res.length; i++) {
+        const { purchase_date, sold_price } = res[i];
+        let month = purchase_date.split("T")[0].split("-")[1];
+        console.log("datamonth", month);
+        if (month == monthA[j]) {
+          monthSpend += sold_price;
+        }
+      }
+      aggregated.push([monthA[j], monthSpend]);
+    }
+    for (let i = 0; i < aggregated.length; i++) {
+      console.log("agg", aggregated[i]);
+    }
+    setFlights(aggregated);
+  }
+  let heading = ["month", "spending"];
+  console.log(typeof heading);
+  console.log(typeof monthA);
   return (
     <div className="card">
-      {/* <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-
-      <script type="text/javascript" src="jscript/graph.js"></script>
-      <script src="/js/app.js"></script> */}
-
       <h1>Track spending</h1>
-      {/* <canvas id="myChart" style="width:100%;max-width:600px"></canvas> */}
+      <h3>Optional:define your own start and end date (YYYY-MM-DD)</h3>
+      <div className="form-group">
+        <label htmlFor="start_date"> Enter Start Date</label>
+        <input
+          type="text"
+          name="start_date"
+          id="start_date"
+          onChange={(e) => handleEvent(e)}
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="end_date"> Enter End Date</label>
+        <input
+          type="text"
+          name="end_date"
+          id="end_date"
+          onChange={(e) => handleEvent(e)}
+        />
+      </div>
+      <br></br>
+      <button className="btn" onClick={() => sendRequest(formDetails)}>
+        {" "}
+        Track Spendng{" "}
+      </button>
+      <br></br>
+      <br></br>
+      <Table heading={heading} body={foundFlights} />
       <div className="actions">
         <Link to="/clienthome">
           <button className="btn">Go to client home</button>
