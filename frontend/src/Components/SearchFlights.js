@@ -119,7 +119,7 @@ function SearchFlights() {
               );
             }}
           >
-            HELLO
+            Purchase
           </button>,
         ]);
         console.log(aggregated);
