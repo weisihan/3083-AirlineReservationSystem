@@ -316,15 +316,130 @@ app.post("/newclient", (req, res) => {
 });
 
 app.post("/newflight", (req, res) => {
-  console.log(req.body);
-  db.push("/flight", [req.body], false);
-  res.send("newflight");
+  // parse the dept_date to sql date format
+  // let dept_date = req.body.payload.dept_date.split("T")[0];
+  // let dept_time = req.body.payload.dept_time.split("T")[1];
+  // // parse the arr date to sql date format
+  // let arr_date = req.body.payload.arr_date.split("T")[0];
+  // let arr_time = req.body.payload.arr_time.split("T")[1];
+  // // change dept time and arr time to eastern standard time
+  // let dept_time_eastern = moment(dept_time, "HH:mm:ss")
+  //   .add(-5, "hours")
+  //   .format("HH:mm:ss");
+  // let arr_time_eastern = moment(arr_time, "HH:mm:ss")
+  //   .add(-5, "hours")
+  //   .format("HH:mm:ss");
+
+  // check if the airports exist
+  connection.query(
+    `SELECT *
+    FROM Airport
+    WHERE airport_code = ?`,
+    [req.body.dept_airport],
+    (err, rows) => {
+      if (rows.length == 0) {
+        // see if departure airport exists
+        res.send("Error: Departure Airport does not exist");
+      } else {
+        connection.query(
+          `SELECT *
+          FROM Airport
+          WHERE airport_code = ?`,
+          [req.body.arr_airport],
+          (err, rows) => {
+            if (rows.length == 0) {
+              // see if arrival airport exists
+              res.send("Error: Arrival Airport does not exist");
+            } else {
+              connection.query(
+                `SELECT *
+                FROM Airplane
+                WHERE ID = ?
+                AND airline_name = ?`,
+                [
+                  req.body.airplane_id,
+                  req.body.airplane_airline_name_in_flight,
+                ],
+                (err, rows) => {
+                  if (rows.length == 0) {
+                    // see if airplane exists
+                    res.send("Error: Airplane does not exist");
+                  } else {
+                    // if all the checks pass, add the flight
+                    connection.query(
+                      `INSERT INTO Flight
+                    (flight_num, airline_name, dept_airport, arr_airport, dept_date, dept_time, arr_date, arr_time, airplane_id, flight_status, base_price, airplane_airline_name)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                      [
+                        req.body.flight_num,
+                        req.body.airline_name,
+                        req.body.dept_airport,
+                        req.body.arr_airport,
+                        dept_date,
+                        dept_time_eastern,
+                        arr_date,
+                        arr_time_eastern,
+                        req.body.airplane_id,
+                        req.body.flight_status,
+                        req.body.base_price,
+                        req.body.airplane_airline_name_in_flight,
+                      ],
+                      (err, rows) => {
+                        if (!err) {
+                          res.send("Added new flight");
+                        } else {
+                          res.send(
+                            "Unable to add the flight, check all your fields and try again"
+                          );
+                          console.log(err);
+                        }
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    }
+  );
 });
 
 app.post("/newairport", (req, res) => {
-  console.log(req.body);
-  db.push("/airport", [req.body], false);
-  res.send("newairport");
+  console.log("hihihihihi");
+  connection.query(
+    `INSERT INTO Airport
+    (airport_code, airport_name, city)
+    VALUES (?, ?, ?)`,
+    [req.body.airport_code, req.body.airport_name, req.body.city],
+    (err, rows) => {
+      if (!err) {
+        res.send("Added new airport");
+      } else {
+        res.send("Airport already exists");
+        console.log(err);
+      }
+    }
+  );
+});
+
+// add new airplane to the database
+app.post("/newairplane", (req, res) => {
+  connection.query(
+    `INSERT INTO Airplane
+    (ID, airline_name, seat_amt)
+    VALUES (?, ?, ?)`,
+    [req.body.airplane_id, req.body.airline_name, req.body.seat_amt],
+    (err, rows) => {
+      if (!err) {
+        res.send("Added new airplane");
+      } else {
+        res.send("Airplane already exists");
+        console.log(err);
+      }
+    }
+  );
 });
 
 app.post("/logout", (req, res) => {
@@ -350,6 +465,29 @@ app.post("/clientcheck", (req, res) => {
   } else {
     res.send("false");
   }
+});
+
+app.post("/viewfeedback", (req, res) => {
+  console.log(req.body);
+  let dept_date = req.body.dept_date.split("T")[0];
+  // get all the feedbacks from the feedback table based on the specified flight number, dept date, dept time and airline name
+  connection.query(
+    `SELECT *
+    FROM Feedback
+    WHERE flight_num = ?
+    AND dept_date = ?
+    AND dept_time = ?
+    AND airline_name = ?`,
+    [req.body.flight_num, dept_date, req.body.dept_time, req.body.airline_name],
+    (err, rows) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        res.send(err);
+        console.log(err);
+      }
+    }
+  );
 });
 
 app.listen(3001, () => console.log("Server is listening to port 3001"));
