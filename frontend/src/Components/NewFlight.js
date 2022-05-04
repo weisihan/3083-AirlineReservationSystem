@@ -21,13 +21,13 @@ function NewFlight() {
       }
     }
 
-    const data = await axios.get("http://localhost:3001/", details);
-    for (const item in data.data.flight) {
-      if (data.data.flight[item].flightnum === details.flightnum) {
-        alert("Flight already exists");
-        return;
-      }
-    }
+    // const data = await axios.get("http://localhost:3001/", details);
+    // for (const item in data.data.flight) {
+    //   if (data.data.flight[item].flightnum === details.flightnum) {
+    //     alert("Flight already exists");
+    //     return;
+    //   }
+    // }
 
     const res = await axios.post("http://localhost:3001/newflight", details);
     console.log(res);

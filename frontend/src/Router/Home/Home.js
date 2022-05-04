@@ -2,7 +2,22 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+async function AllFlights() {
+  const [details, setDetails] = useState({
+    allflights: {},
+  });
+  let flights = await axios.all([
+    await axios.post("http://localhost:3001/home", details),
+  ]);
+
+  return flights.data;
+}
+
 function Home() {
+  flightData = AllFlights();
+
+  console.log(flightData);
+
   return (
     <div className="card">
       <h1>Homepage </h1>
@@ -20,6 +35,7 @@ function Home() {
                   <button className="btn"> Register </button>
                 </Link>
               </div>
+              <br></br>
             </div>
           </div>
         </div>

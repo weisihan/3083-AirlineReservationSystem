@@ -69,6 +69,8 @@ function LoginLayout() {
 }
 
 function App() {
+  const loggedIn = localStorage.getItem("loggedIn");
+
   return (
     <div>
       <Routes>

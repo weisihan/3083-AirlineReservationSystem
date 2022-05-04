@@ -44,16 +44,17 @@ function TrackSpending() {
     //   }
     // ];
   }
-  track();
+
+  // track();
   return (
     <div className="card">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+      {/* <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
       <script type="text/javascript" src="jscript/graph.js"></script>
-      <script src="/js/app.js"></script>
+      <script src="/js/app.js"></script> */}
 
       <h1>Track spending</h1>
-      <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+      {/* <canvas id="myChart" style="width:100%;max-width:600px"></canvas> */}
       <div className="actions">
         <Link to="/clienthome">
           <button className="btn">Go to client home</button>

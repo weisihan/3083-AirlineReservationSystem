@@ -13,37 +13,6 @@ import { useNavigate } from "react-router-dom";
 // }
 
 function ClientHome() {
-  let navigate = useNavigate();
-  const [details, setDetails] = useState({
-    status: "",
-  });
-
-  async function getStatus() {
-    const resBody = await axios.post("http://localhost:3001/clientcheck");
-    const res = resBody.data;
-    if (res === true) {
-      console.log("logged in");
-      details.status = "true";
-    } else {
-      alert("you are not logged in");
-      console.log("navigating to home");
-      navigate("/home");
-      details.status = "false";
-    }
-  }
-
-  useEffect(() => {
-    if (details.status === "") {
-      getStatus();
-    }
-  });
-
-  useEffect(() => {
-    if (details.status === "false") {
-      navigate("/home");
-    }
-  });
-
   return (
     <div className="card">
       <h1>Client Homepage </h1>
