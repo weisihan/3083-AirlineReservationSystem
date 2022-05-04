@@ -1,36 +1,77 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
-import DateFnsUtils from "@date-io/date-fns"; // choose your lib
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { useNavigate } from "react-router-dom";
-import * as ReactDOM from "react-dom/client";
-import { fontWeight } from "@mui/system";
-
-let foundFlag = 0;
-
-async function sendRequest(formDetails) {
-  let res = await axios.post(
-    "http://localhost:3001/clientSearchFlight",
-    formDetails
-  );
-  console.log("newres", res.data);
-  for (let item in res.data) {
-    console.log("item", item);
-  }
-  console.log("sending axios request...");
-  console.log(formDetails);
-}
+import Table from "./Table.component";
+import { UserContext } from "../contexts/user.context";
 
 function SearchFlights() {
+  const { currentUser } = useContext(UserContext);
+  console.log(currentUser);
   const [formDetails, setDetails] = useState({
-    sourceCity: "",
-    destination: "",
-    departureDate: "",
-    arrivalDate: "",
+    sourceCity: "LAX",
+    destination: "PEK",
+    departureDate: "2021-03-04",
+    arrivalDate: "2021-03-05",
   });
+
+  const [foundFlights, setFlights] = useState([]);
+
+  async function purchaseTicket(flightid, currentUser) {
+    if (!currentUser) {
+      alert("NO USER IS LOGGED IN!!!");
+    }
+    console.log(flightid);
+    console.log("go purchase ticket...");
+  }
+
+  async function sendRequest(formDetails) {
+    let res = await axios.post(
+      "http://localhost:3001/clientSearchFlight",
+      formDetails
+    );
+    res = res.data;
+    console.log("newres", res);
+    let aggregated = [];
+    for (let i = 0; i < res.length; i++) {
+      console.log("item", res[i]);
+      console.log("datatime", res[i].arr_date.split("T")[0]);
+      console.log("formtime", formDetails.arrivalDate);
+      if (
+        res[i].arr_date.split("T")[0] == formDetails.arrivalDate &&
+        res[i].dept_date.split("T")[0] == formDetails.departureDate
+      ) {
+        // airline_name: "Delta";
+        // airplane_airline_name: "Delta";
+        // airplane_id: "Boeing 787-7";
+        // arr_airport: "PEK";
+        // arr_date: "2021-03-05T05:00:00.000Z";
+        // arr_time: "23:00:00";
+        // base_price: 5500;
+        // dept_airport: "LAX";
+        // dept_date: "2021-03-04T05:00:00.000Z";
+        // dept_time: "14:00:00";
+        // flight_num: "DL456";
+        // flight_status: "Delay";
+        const { airline_name, arr_airport, dept_airport, flight_num } = res[i];
+        aggregated.push([
+          airline_name,
+          arr_airport,
+          dept_airport,
+          flight_num,
+          <button
+            onClick={() => {
+              purchaseTicket(airline_name, currentUser);
+            }}
+          >
+            hello
+          </button>,
+        ]);
+      }
+    }
+
+    setFlights(aggregated);
+    console.log(aggregated);
+  }
 
   function handleEvent(event) {
     console.log("targetname", event.target.name);
@@ -105,6 +146,10 @@ function SearchFlights() {
       <Link to="/clienthome">
         <button className="btn">Go to client home</button>
       </Link>
+      <Table
+        heading={["airline_name", "dept", "arrival", "flight_num", "purchase"]}
+        body={foundFlights}
+      />
     </div>
   );
 }
