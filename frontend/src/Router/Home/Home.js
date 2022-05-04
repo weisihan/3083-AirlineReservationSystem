@@ -52,8 +52,8 @@ function Home() {
                 <Link to="/register">
                   <button className="btn"> Register </button>
                 </Link>
-                <Link to="/home">
-                  <button className="btn"> Search for flights </button>
+                <Link to="/searchflights">
+                  <button className="btn">Search Flight</button>
                 </Link>
               </div>
               <br></br>

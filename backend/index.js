@@ -310,7 +310,7 @@ app.post("/clientcancel", (req, res) => {
           WHERE Purchase.ticket_id = ?
           `,
           [rows[0].ID],
-          console.log("hi", rows[0].ID),
+
           (err, rows) => {
             if (!err) {
               res.send({
