@@ -11,8 +11,15 @@ import { fontWeight } from "@mui/system";
 
 let foundFlag = 0;
 
-function sendRequest(formDetails) {
-  axios.post("http://localhost:3001/clientSearchFlight", formDetails);
+async function sendRequest(formDetails) {
+  let res = await axios.post(
+    "http://localhost:3001/clientSearchFlight",
+    formDetails
+  );
+  console.log("newres", res.data);
+  for (let item in res.data) {
+    console.log("item", item);
+  }
   console.log("sending axios request...");
   console.log(formDetails);
 }
