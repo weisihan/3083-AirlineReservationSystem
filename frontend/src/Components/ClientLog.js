@@ -22,19 +22,6 @@ function ClientLog(props) {
       }
     }
 
-    // let general = await axios.all([
-    //   await axios.post("http://localhost:3001/clientlogin", details),
-    //   await axios.post("http://localhost:3001/clientFlightBack", details),
-    // ]);
-    // console.log("general", general);
-    // const resBody = general[0];
-
-    // const forFlight = await axios.post(
-    //   "http://localhost:3001/clientFlightBack",
-    //   details
-    // );
-    // );
-
     let res = await axios.post("http://localhost:3001/clientlogin", details);
     res = res.data;
     console.log(res);

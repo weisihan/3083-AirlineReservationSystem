@@ -36,11 +36,21 @@ app.post("/", (req, res) => {
 
 app.get("/home", (req, res) => {
   // select all the flight data
-  // future 30 days!!!
+  let departDate = new Date();
+  let future30 = new Date();
+  departDate = moment(departDate).format("YYYY-MM-DD");
+  future30 = moment(departDate).format("YYYY-MM-DD");
+  future30 = moment(future30).add(30, "days");
+  console.log(future30);
+
   connection.query("SELECT * FROM Flight", (err, rows) => {
     if (!err) {
-      res.send(rows);
-      console.log(rows);
+      let filteredRows = rows.filter(
+        (row) => future30.diff(moment(row["dept_date"]), "days") < 30
+      );
+      console.log(filteredRows[0]);
+
+      res.send(filteredRows);
     } else {
       res.status(500).send(err);
       console.log(err);
@@ -49,26 +59,32 @@ app.get("/home", (req, res) => {
 });
 
 app.post("/stafflogin", (req, res) => {
-  console.log("post");
-  console.log(req.body.username);
-  console.log(req.body.password);
+  const { username, staff_password } = req.body;
 
-  // check if username and password are correct
-  var data = db.getData("/");
-  for (const item in data.staff) {
-    if (data.staff[item].username === req.body.username) {
-      if (data.staff[item].password === req.body.password) {
-        console.log("Login successful");
-        res.send(true);
-        currUser = req.body.username;
-        currRole = "staff";
-        return;
+  const hashedPassword = md5(staff_password); // hash the password
+  connection.query(
+    `SELECT * FROM AirlineStaff WHERE username = '${username}'`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        if (result.length === 0) {
+          res.status(400).send("Invalid username or password");
+        }
+        if (result[0].staff_password === hashedPassword) {
+          // send back the user information without the password
+          console.log("login success");
+          res.send(true);
+        } else {
+          res.status(400).send("Incorrect password");
+        }
       }
+      return;
     }
-  }
-  console.log("Invalid username or password");
-  res.send(false);
+  );
 });
+
 app.post("/displayFlight", (req, res) => {
   let data = db.getData("/");
   res.send(data.flight);
@@ -438,37 +454,39 @@ app.post("/clientView", (req, res) => {
   }
 });
 app.post("/newstaff", (req, res) => {
-  console.log(req.body);
-  db.push("/staff", [req.body], false);
-  res.send("newstaff");
-});
-app.post("/money", (req, res) => {
-  console.log("money", req.body);
+  const { username, password, first_name, last_name, birth, airline_name } =
+    req.body;
+  const birth_mysql = `${birth.slice(0, 4)}/${birth.slice(5, 7)}/${birth.slice(
+    8,
+    10
+  )}`;
+
+  const hashedPassword = md5(password);
   connection.query(
-    `SELECT *
-    FROM Ticket
-    WHERE ID IN (
-      SELECT Ticket.ID
-      FROM Ticket
-      WHERE Ticket.ID IN (
-        SELECT Purchase.ticket_id
-        FROM Purchase
-        WHERE Purchase.email = ? 
-      )
-    )
-    AND purchase_date BETWEEN ? AND ?`,
-    [req.body.email, req.body.start_date, req.body.end_date],
-    (err, rows) => {
-      if (!err) {
-        let monthA = [];
-        let start = parseInt(req.body.start_date.split("T")[0].split("-")[1]);
-        let end = parseInt(req.body.end_date.split("T")[0].split("-")[1]);
-        for (let i = start; i <= end; i++) {
-          monthA.push(i);
-        }
-        res.send(rows);
-      } else {
+    `SELECT * FROM AirlineStaff WHERE username = '${username}'`,
+    (err, result) => {
+      if (err) {
         console.log(err);
+        res.status(500).send(err);
+      } else if (result.length > 0) {
+        res.status(400).send("User already exists");
+      } else {
+        const query = `INSERT INTO AirlineStaff(username,staff_password,first_name,last_name,DOB,airline_name) VALUES (
+                    '${username}',
+                    '${hashedPassword}',
+                    '${first_name}',
+                    '${last_name}',
+                    '${birth_mysql}',
+                    '${airline_name}'
+                )`;
+        connection.query(query, (err, result) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send(err);
+          } else {
+            res.status(200).send(result);
+          }
+        });
       }
     }
   );
@@ -536,21 +554,6 @@ app.post("/newclient", (req, res) => {
 });
 
 app.post("/newflight", (req, res) => {
-  // parse the dept_date to sql date format
-  // let dept_date = req.body.payload.dept_date.split("T")[0];
-  // let dept_time = req.body.payload.dept_time.split("T")[1];
-  // // parse the arr date to sql date format
-  // let arr_date = req.body.payload.arr_date.split("T")[0];
-  // let arr_time = req.body.payload.arr_time.split("T")[1];
-  // // change dept time and arr time to eastern standard time
-  // let dept_time_eastern = moment(dept_time, "HH:mm:ss")
-  //   .add(-5, "hours")
-  //   .format("HH:mm:ss");
-  // let arr_time_eastern = moment(arr_time, "HH:mm:ss")
-  //   .add(-5, "hours")
-  //   .format("HH:mm:ss");
-
-  // check if the airports exist
   connection.query(
     `SELECT *
     FROM Airport
@@ -595,10 +598,10 @@ app.post("/newflight", (req, res) => {
                         req.body.airline_name,
                         req.body.dept_airport,
                         req.body.arr_airport,
-                        dept_date,
-                        dept_time_eastern,
-                        arr_date,
-                        arr_time_eastern,
+                        req.body.dept_date,
+                        req.body.dept_time_eastern,
+                        req.body.arr_date,
+                        req.body.arr_time_eastern,
                         req.body.airplane_id,
                         req.body.flight_status,
                         req.body.base_price,
