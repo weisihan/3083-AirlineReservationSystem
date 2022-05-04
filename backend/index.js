@@ -24,6 +24,15 @@ app.use(cors());
 // var currRole = ""; //staff or client
 // var currComp = ""; // staff's company
 
+app.post("/", (req, res) => {
+  console.log(req.body);
+  if (req.body["username"] == "justin") {
+    console.log("YOOO");
+  }
+  // sql query using the req.username
+  res.send(req.body);
+});
+
 app.get("/home", (req, res) => {
   // select all the flight data
   // future 30 days!!!
@@ -137,28 +146,67 @@ app.post("/clientFlightBack", (req, res) => {
   //   }
   // }
 });
+
 app.post("/clientSearchFlight", (req, res) => {
   console.log("flight backend search");
-  let data = db.getData("/");
+  // let data = db.getData("/");
   let dataArray = [];
+
   console.log("reqbody", req.body);
-  for (const item in data.flight) {
-    if (data.flight[item].departairport === req.body.sourcecity) {
-      console.log("1connected");
-      if (data.flight[item].arriveairport === req.body.descity) {
-        console.log("descity match");
-        if (data.flight[item].departureDate === req.body.depdate) {
-          console.log("depdate match");
-          if (data.flight[item].arrivalDate === req.body.arrivedate) {
-            console.log("connected");
-            console.log(data.flight[item].arriveairport);
-            dataArray.push(data.flight[item]);
-          }
-        }
-      }
+
+  const { destination, sourceCity, departureDate, arriveDate } = req.body;
+  connection.query(
+    `SELECT * FROM airline_reservation.Flight WHERE dept_airport='${sourceCity}' AND arr_airport ='${destination}'`,
+    (err, result) => {
+      res.send(result);
     }
-  }
-  res.send(dataArray);
+  );
+  // connection.query(
+  //   `SELECT * FROM airline_reservation.Flight WHERE dept_airport='${sourceCity}' AND arr_airport ='${destination}' dept_date.split("T")[0] = '${departureDate}' AND dept_date.split("T")[0] = '${departureDate}' AND ;`,
+  //   (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //       res.status(500).send(err);
+  //     } else {
+  //       console.log("flights", result);
+  //       res.send(result);
+  //     }
+  //   }
+  // );
+
+  // const {
+  //   c_name,
+  //   cust_password,
+  //   building_num,
+  //   street,
+  //   city,
+  //   state,
+  //   phone_num,
+  //   passport_num,
+  //   passport_exp,
+  //   passport_country,
+  //   birth,
+  // }
+  //= result[0];
+  //set up sql
+
+  // for (const item in data.flight) {
+  //   if (data.flight[item].departairport === req.body.sourcecity) {
+  //     console.log("1connected");
+  //     if (data.flight[item].arriveairport === req.body.descity) {
+  //       console.log("descity match");
+  //       if (data.flight[item].departureDate === req.body.depdate) {
+  //         console.log("depdate match");
+  //         if (data.flight[item].arrivalDate === req.body.arrivedate) {
+  //           console.log("connected");
+  //           console.log(data.flight[item].arriveairport);
+  //           dataArray.push(data.flight[item]);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+  // res.send(dataArray);
 });
 app.post("/clientReviewBack", (req, res) => {
   let data = db.getData("/");
@@ -191,53 +239,54 @@ app.post("/clientPurchaseTicket", (req, res) => {
 app.post("/clientlogin", (req, res) => {
   const { email, password } = req.body;
   const hashedPassword = md5(password); // hash the password
-  connection.query(
-    `SELECT * FROM Customer WHERE email = '${email}'`, // find the client
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send(err);
-      } else {
-        const {
-          c_name,
-          cust_password,
-          building_num,
-          street,
-          city,
-          state,
-          phone_num,
-          passport_num,
-          passport_exp,
-          passport_country,
-          birth,
-        } = result[0];
+  res.send(true);
+  // connection.query(
+  //   `SELECT * FROM Customer WHERE email = '${email}'`, // find the client
+  //   (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //       res.status(500).send(err);
+  //     } else {
+  //       const {
+  //         c_name,
+  //         cust_password,
+  //         building_num,
+  //         street,
+  //         city,
+  //         state,
+  //         phone_num,
+  //         passport_num,
+  //         passport_exp,
+  //         passport_country,
+  //         birth,
+  //       } = result[0];
 
-        const c_info = {
-          c_name,
-          email,
-          building_num,
-          street,
-          city,
-          state,
-          phone_num,
-          passport_num,
-          passport_exp,
-          passport_country,
-          birth,
-        };
+  //       const c_info = {
+  //         c_name,
+  //         email,
+  //         building_num,
+  //         street,
+  //         city,
+  //         state,
+  //         phone_num,
+  //         passport_num,
+  //         passport_exp,
+  //         passport_country,
+  //         birth,
+  //       };
 
-        if (cust_password === hashedPassword) {
-          console.log("login success");
-          res.send(true);
-          // currUser = req.body.email;
-          // currRole = "client";
-        } else {
-          res.status(400).send("Incorrect password");
-        }
-      }
-      return;
-    }
-  );
+  //       if (cust_password === hashedPassword) {
+  //         console.log("login success");
+  //         res.send(true);
+  //         // currUser = req.body.email;
+  //         // currRole = "client";
+  //       } else {
+  //         res.status(400).send("Incorrect password");
+  //       }
+  //     }
+  //     return;
+  //   }
+  // );
 });
 
 app.post("/newstaff", (req, res) => {
