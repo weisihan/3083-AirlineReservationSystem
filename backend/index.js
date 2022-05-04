@@ -357,21 +357,6 @@ app.post("/newclient", (req, res) => {
 });
 
 app.post("/newflight", (req, res) => {
-  // parse the dept_date to sql date format
-  // let dept_date = req.body.payload.dept_date.split("T")[0];
-  // let dept_time = req.body.payload.dept_time.split("T")[1];
-  // // parse the arr date to sql date format
-  // let arr_date = req.body.payload.arr_date.split("T")[0];
-  // let arr_time = req.body.payload.arr_time.split("T")[1];
-  // // change dept time and arr time to eastern standard time
-  // let dept_time_eastern = moment(dept_time, "HH:mm:ss")
-  //   .add(-5, "hours")
-  //   .format("HH:mm:ss");
-  // let arr_time_eastern = moment(arr_time, "HH:mm:ss")
-  //   .add(-5, "hours")
-  //   .format("HH:mm:ss");
-
-  // check if the airports exist
   connection.query(
     `SELECT *
     FROM Airport
@@ -416,10 +401,10 @@ app.post("/newflight", (req, res) => {
                         req.body.airline_name,
                         req.body.dept_airport,
                         req.body.arr_airport,
-                        dept_date,
-                        dept_time_eastern,
-                        arr_date,
-                        arr_time_eastern,
+                        req.body.dept_date,
+                        req.body.dept_time_eastern,
+                        req.body.arr_date,
+                        req.body.arr_time_eastern,
                         req.body.airplane_id,
                         req.body.flight_status,
                         req.body.base_price,
