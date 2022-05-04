@@ -7,10 +7,18 @@ function NewFlight() {
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({
-    flightnum: "",
-    departairport: "",
-    arriveairport: "",
-    company: "",
+    flight_num: "",
+    airline_name: "",
+    dept_airport: "",
+    arr_airport: "",
+    dept_date: "",
+    dept_time_eastern: "",
+    arr_date: "",
+    arr_time_eastern: "",
+    airplane_id: "",
+    flight_status: "",
+    base_price: "",
+    airplane_airline_name_in_flight: "",
   });
 
   async function Added() {
@@ -21,72 +29,178 @@ function NewFlight() {
       }
     }
 
-    // const data = await axios.get("http://localhost:3001/", details);
-    // for (const item in data.data.flight) {
-    //   if (data.data.flight[item].flightnum === details.flightnum) {
-    //     alert("Flight already exists");
-    //     return;
-    //   }
-    // }
-
     const res = await axios.post("http://localhost:3001/newflight", details);
-    console.log(res);
-    alert("Successfully added");
-    navigate("/viewflights");
+    console.log(res); // backend stuff to be done
+    alert("Successfully added!");
+    //push data to database
+    navigate("/staffhome");
   }
 
   return (
     <div className="card">
-      <h1>Add new flight </h1>
       <div className="actions">
+        <h2>Adding a new flight</h2>
         <div className="form-inner">
           <div className="form-group">
-            <label htmlFor="flightnum"> Flight Number: </label>
+            <label htmlFor="flight_num"> Flight Number: </label>
             <input
               type="text"
-              name="flightnum"
-              id="flightnum"
+              name="flight_num"
+              id="flight_num"
               onChange={(e) =>
-                setDetails({ ...details, flightnum: e.target.value })
+                setDetails({ ...details, flight_num: e.target.value })
               }
-              value={details.flightnum}
+              value={details.flight_num}
+            />
+          </div>
+          <br></br>
+          <div className="form-group">
+            <label htmlFor="airline_name"> Airline Name: </label>
+            <input
+              type="text"
+              name="airline_name"
+              id="airline_name"
+              onChange={(e) =>
+                setDetails({ ...details, airline_name: e.target.value })
+              }
+              value={details.airline_name}
+            />
+          </div>
+          <br></br>
+          <div className="form-group">
+            <label htmlFor="dept_airport"> Departure Airport: </label>
+            <input
+              type="text"
+              name="dept_airport"
+              id="dept_airport"
+              onChange={(e) =>
+                setDetails({ ...details, dept_airport: e.target.value })
+              }
+              value={details.dept_airport}
             />
           </div>
         </div>
+        <br></br>
         <div className="form-group">
-          <label htmlFor="departairport"> Departure Airport: </label>
+          <label htmlFor="arr_airport"> Arrival Airport: </label>
           <input
             type="text"
-            name="departairport"
-            id="departairport"
+            name="arr_airport"
+            id="arr_airport"
             onChange={(e) =>
-              setDetails({ ...details, departairport: e.target.value })
+              setDetails({ ...details, arr_airport: e.target.value })
             }
-            value={details.departairport}
+            value={details.arr_airport}
           />
         </div>
+        <br></br>
         <div className="form-group">
-          <label htmlFor="arriveairport"> Arrival Airport: </label>
+          <label htmlFor="dept_date"> Departure Date: </label>
           <input
             type="text"
-            name="arriveairport"
-            id="arriveairport"
+            name="dept_date"
+            id="dept_date"
             onChange={(e) =>
-              setDetails({ ...details, arriveairport: e.target.value })
+              setDetails({ ...details, dept_date: e.target.value })
             }
-            value={details.arriveairport}
+            value={details.dept_date}
           />
         </div>
+        <br></br>
         <div className="form-group">
-          <label htmlFor="company"> Company: </label>
+          <label htmlFor="dept_time_eastern"> Departure Time: </label>
           <input
             type="text"
-            name="company"
-            id="company"
+            name="dept_time_eastern"
+            id="dept_time_eastern"
             onChange={(e) =>
-              setDetails({ ...details, company: e.target.value })
+              setDetails({ ...details, dept_time_eastern: e.target.value })
             }
-            value={details.company}
+            value={details.dept_time_eastern}
+          />
+        </div>
+        <br></br>
+        <div className="form-group">
+          <label htmlFor="arr_date"> Arrival Date: </label>
+          <input
+            type="text"
+            name="arr_date"
+            id="arr_date"
+            onChange={(e) =>
+              setDetails({ ...details, arr_date: e.target.value })
+            }
+            value={details.arr_date}
+          />
+        </div>
+        <br></br>
+        <div className="form-group">
+          <label htmlFor="arr_time_eastern"> Arrival Time: </label>
+          <input
+            type="text"
+            name="arr_time_eastern"
+            id="arr_time_eastern"
+            onChange={(e) =>
+              setDetails({ ...details, arr_time_eastern: e.target.value })
+            }
+            value={details.arr_time_eastern}
+          />
+        </div>
+        <br></br>
+        <div className="form-group">
+          <label htmlFor="airplane_id"> Airplane ID: </label>
+          <input
+            type="text"
+            name="airplane_id"
+            id="airplane_id"
+            onChange={(e) =>
+              setDetails({ ...details, airplane_id: e.target.value })
+            }
+            value={details.airplane_id}
+          />
+        </div>
+        <br></br>
+        <div className="form-group">
+          <label htmlFor="flight_status"> Flight Status: </label>
+          <input
+            type="text"
+            name="flight_status"
+            id="flight_status"
+            onChange={(e) =>
+              setDetails({ ...details, flight_status: e.target.value })
+            }
+            value={details.flight_status}
+          />
+        </div>
+        <br></br>
+        <div className="form-group">
+          <label htmlFor="base_price"> Base Price: </label>
+          <input
+            type="text"
+            name="base_price"
+            id="base_price"
+            onChange={(e) =>
+              setDetails({ ...details, base_price: e.target.value })
+            }
+            value={details.base_price}
+          />
+        </div>
+        <br></br>
+        <div className="form-group">
+          <label htmlFor="airplane_airline_name_in_flight">
+            {" "}
+            Airplane Name:{" "}
+          </label>
+          <input
+            type="text"
+            name="airplane_airline_name_in_flight"
+            id="airplane_airline_name_in_flight"
+            onChange={(e) =>
+              setDetails({
+                ...details,
+                airplane_airline_name_in_flight: e.target.value,
+              })
+            }
+            value={details.airplane_airline_name_in_flight}
           />
         </div>
         <br></br>

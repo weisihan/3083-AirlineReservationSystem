@@ -7,8 +7,9 @@ function NewFlight() {
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({
-    code: "",
-    name: "",
+    airport_code: "",
+    airport_name: "",
+    city: "",
   });
 
   async function Added() {
@@ -40,24 +41,38 @@ function NewFlight() {
       <div className="actions">
         <div className="form-inner">
           <div className="form-group">
-            <label htmlFor="code"> Airport Code: </label>
+            <label htmlFor="airport_code"> Airport Code: </label>
             <input
               type="text"
-              name="code"
-              id="code"
-              onChange={(e) => setDetails({ ...details, code: e.target.value })}
-              value={details.code}
+              name="airport_code"
+              id="airport_code"
+              onChange={(e) =>
+                setDetails({ ...details, airport_code: e.target.value })
+              }
+              value={details.airport_code}
             />
           </div>
         </div>
         <div className="form-group">
-          <label htmlFor="name"> Airport Name: </label>
+          <label htmlFor="airport_name"> Airport Name: </label>
           <input
             type="text"
-            name="name"
-            id="name"
-            onChange={(e) => setDetails({ ...details, name: e.target.value })}
-            value={details.name}
+            name="airport_name"
+            id="airport_name"
+            onChange={(e) =>
+              setDetails({ ...details, airport_name: e.target.value })
+            }
+            value={details.airport_name}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="city"> City: </label>
+          <input
+            type="text"
+            name="city"
+            id="city"
+            onChange={(e) => setDetails({ ...details, city: e.target.value })}
+            value={details.city}
           />
         </div>
         <br></br>
