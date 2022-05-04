@@ -48,6 +48,20 @@ app.get("/home", (req, res) => {
   });
 });
 
+app.get("/viewflight", (req, res) => {
+  // select all the flight data
+  // future 30 days
+  connection.query(`SELECT * FROM Customer WHERE airline_name = '${res.body.airline_name}' AND dept_date > CURDATE()`, (err, rows) => {
+    if (!err) {
+      res.send(rows);
+      console.log(rows);
+    } else {
+      res.status(500).send(err);
+      console.log(err);
+    }
+  });
+});
+
 app.post("/stafflogin", (req, res) => {
   console.log("post");
   console.log(req.body.username);
@@ -634,5 +648,77 @@ app.post("/viewfeedback", (req, res) => {
     }
   );
 });
+
+// change the status of a flight
+app.post("/changestatus", (req, res) => {
+  // find the flight and extract the status
+  connection.query(
+    `SELECT *
+    FROM Flight
+    WHERE flight_num = ?
+    AND airline_name = ?
+    AND dept_date = ?
+    AND dept_time = ?`,
+    [req.body.flight_num, req.body.airline_name, req.body.dept_date, req.body.dept_time],
+    (err, rows) => {
+      if (!err) {
+        console.log("");
+        // change ontime to delay
+        if (rows[0].flight_status == "On-time") {
+          connection.query(
+            `UPDATE Flight
+            SET flight_status = ?
+            WHERE flight_num = ?
+            AND airline_name = ?
+            AND dept_date = ?
+            AND dept_time = ?`,
+            [
+              "Delayed",
+              req.body.flight_num,
+              req.body.airline_name,
+              req.body.dept_date,
+              req.body.dept_time,
+            ],
+            (err, rows) => {
+              if (!err) {
+                res.send("Changed to Delayed");
+              } else {
+                console.log(err);
+              }
+            }
+          );
+        } else {
+          // change delay to ontime
+          connection.query(
+            `UPDATE Flight
+            SET flight_status = ?
+            WHERE flight_num = ?
+            AND airline_name = ?
+            AND dept_date = ?
+            AND dept_time = ?`,
+            [
+              "On-time",
+              req.body.flight_num,
+              req.body.airline_name,
+              req.body.dept_date,
+              req.body.dept_time,
+            ],
+            (err, rows) => {
+              if (!err) {
+                res.send("Changed to On Time");
+              } else {
+                console.log(err);
+              }
+            }
+          );
+        }
+      } else {
+        res.send("Unable to change flight status");
+        console.log(err);
+      }
+    }
+  );
+});
+
 
 app.listen(3001, () => console.log("Server is listening to port 3001"));
