@@ -27,7 +27,7 @@ app.use(cors());
 
 app.post("/", (req, res) => {
   console.log(req.body);
-  if (req.body["username"] == "justin") {
+  if (req.body["username"] == "olivia") {
     console.log("YOOO");
   }
   // sql query using the req.username
@@ -73,67 +73,67 @@ app.post("/displayFlight", (req, res) => {
   let data = db.getData("/");
   res.send(data.flight);
 });
-app.post("/cancelFlight", (req, res) => {
-  console.log("back");
-  let data = db.getData("/");
-  let now = new Date().toLocaleDateString();
-  let flag = 0;
-  console.log("now", now);
-  for (let i = 0; i < data.flight.length; i++) {
-    if (data.flight[i].flightnum == req.body.cancel) {
-      console.log("firststep");
-      let dateNum = data.flight[i].departureDate.split("-");
-      console.log("time", dateNum);
-      let nowNum = now.split("/");
-      console.log("now", nowNum);
-      if (nowNum[2] == dateNum[0]) {
-        console.log(nowNum[2]);
-        console.log(dateNum[0]);
-        if (nowNum[0] == dateNum[1]) {
-          if (nowNum[1] - dateNum[2] <= 1 || dateNum[2] - nowNum[1] <= 1) {
-            flag = 1;
-          }
-        }
-      }
-      // if(data.flight[i].departureDate)
-      if (flag != 1) {
-        console.log("work");
-        for (
-          let tmpItem = 0;
-          tmpItem < data.flight[i].passenger.length;
-          tmpItem++
-        ) {
-          // console.log("tmpEmail",data.data.client[j].email);
-          if (data.flight[i].passenger[tmpItem] == req.body.email) {
-            console.log("delete flgiht", data.flight[i]);
-            // db.delete("/flight", data.flight[i].passenger[tmpItem]);
-            // db.delete("/review", [req.body]);
-            res.send("success");
-            console.log("cancel done");
-          }
-        }
-      }
-    }
-  }
-  res.send("fail");
-  console.log("cancelflight", req.body);
-  // for (const item in data.ticket) {
-  //   console.log("dataemail",data.ticket[item].userEmail);
-  //   console.log("reqemail",req.body.email);
-  //   if(data.ticket[item].userEmail == req.body.email){
-  //     console.log(2);
-  //     if(data.ticket[item].flightNum == req.body.cancel){
-  //       console.log(3);
-  //       db.delete("/review", [req.body]);
-  //       res.send("success");
-  //       console.log("review done");
-  //     }
-  //   }
-  // }
-  // console.log("cancel fail");
-  // res.send("fail");
-  // console.log("cancelflight",req.body);
-});
+// app.post("/cancelFlight", (req, res) => {
+//   console.log("back");
+//   let data = db.getData("/");
+//   let now = new Date().toLocaleDateString();
+//   let flag = 0;
+//   console.log("now", now);
+//   for (let i = 0; i < data.flight.length; i++) {
+//     if (data.flight[i].flightnum == req.body.cancel) {
+//       console.log("firststep");
+//       let dateNum = data.flight[i].departureDate.split("-");
+//       console.log("time", dateNum);
+//       let nowNum = now.split("/");
+//       console.log("now", nowNum);
+//       if (nowNum[2] == dateNum[0]) {
+//         console.log(nowNum[2]);
+//         console.log(dateNum[0]);
+//         if (nowNum[0] == dateNum[1]) {
+//           if (nowNum[1] - dateNum[2] <= 1 || dateNum[2] - nowNum[1] <= 1) {
+//             flag = 1;
+//           }
+//         }
+//       }
+//       // if(data.flight[i].departureDate)
+//       if (flag != 1) {
+//         console.log("work");
+//         for (
+//           let tmpItem = 0;
+//           tmpItem < data.flight[i].passenger.length;
+//           tmpItem++
+//         ) {
+//           // console.log("tmpEmail",data.data.client[j].email);
+//           if (data.flight[i].passenger[tmpItem] == req.body.email) {
+//             console.log("delete flgiht", data.flight[i]);
+//             // db.delete("/flight", data.flight[i].passenger[tmpItem]);
+//             // db.delete("/review", [req.body]);
+//             res.send("success");
+//             console.log("cancel done");
+//           }
+//         }
+//       }
+//     }
+//   }
+//   res.send("fail");
+//   console.log("cancelflight", req.body);
+//   // for (const item in data.ticket) {
+//   //   console.log("dataemail",data.ticket[item].userEmail);
+//   //   console.log("reqemail",req.body.email);
+//   //   if(data.ticket[item].userEmail == req.body.email){
+//   //     console.log(2);
+//   //     if(data.ticket[item].flightNum == req.body.cancel){
+//   //       console.log(3);
+//   //       db.delete("/review", [req.body]);
+//   //       res.send("success");
+//   //       console.log("review done");
+//   //     }
+//   //   }
+//   // }
+//   // console.log("cancel fail");
+//   // res.send("fail");
+//   // console.log("cancelflight",req.body);
+// });
 app.post("/clientFlightBack", (req, res) => {
   console.log("finally worked");
   res.send("hi");
@@ -183,14 +183,6 @@ app.post("/clientReviewBack", (req, res) => {
         return;
       }
       res.status(200).send(true);
-      // if (!err) {
-      //   console.log(rows);
-      //   console.log("success");
-      //   res.send(rows);
-      // } else {
-      //   res.send({ status: 500, message: "Already rated" });
-      //   // console.log(err.message);
-      // }
     }
   );
   //find flight num
@@ -275,20 +267,52 @@ app.post("/clientPurchaseTicket", (req, res) => {
           }
         );
       }
-      // if (!err) {
-
-      // } else {
-      //   res.send(err);
-      //   console.log(err);
-      // }
     }
   );
-  // db.push("/ticket", [req.body]);
-  // res.send("newclient");
-  // console.log("ticket purchase");
-  //res.send(currUser);
 });
-
+app.post("/clientcancel", (req, res) => {
+  console.log("cancel", req.body);
+  // res.send(true);
+  //purchase, ticket,
+  const { flightNum, airlineName, depTime, depDate, email } = req.body;
+  // let airlineName = req.body.airlineName;
+  // let flightNum = req.body.flightNum;
+  // let depDate = req.body.depDate;
+  // let depTime = req.body.depTime;
+  // let email = req.body.email;
+  console.log("num", flightNum);
+  let dept_date = depDate.split("T")[0];
+  connection.query(
+    `DELETE FROM Ticket WHERE airline_name = '${airlineName}' AND flight_num = '${flightNum}' AND dept_date = '${depDate}' AND dept_time = '${depTime}'`,
+    // [airlineName, flightNum, dept_date, depTime],
+    (err, rows) => {
+      if (!err) {
+        // use the ticket id in the row to delete the purchase table
+        connection.query(
+          `
+          DELETE FROM Purchase
+          WHERE Purchase.ticket_id = ?
+          `,
+          [rows[0].ID],
+          console.log("hi", rows[0].ID),
+          (err, rows) => {
+            if (!err) {
+              res.send({
+                success: true,
+              });
+            } else {
+              res.send(err);
+              console.log("hi", err);
+            }
+          }
+        );
+      } else {
+        res.send(err);
+        console.log("error", err);
+      }
+    }
+  );
+});
 app.post("/clientlogin", (req, res) => {
   const { email, password } = req.body;
   const hashedPassword = md5(password); // hash the password
@@ -351,7 +375,68 @@ app.post("/clientlogin", (req, res) => {
     return;
   }
 });
+app.post("/clientView", (req, res) => {
+  // console.log("clientView", req.body);
+  if (req.body.airline_name) {
+    connection.query(
+      `SELECT *
+        FROM Flight
+        WHERE airline_name = ?
+        AND flight_num IN
+        (
+            SELECT Ticket.flight_num
+            FROM Ticket
+            WHERE Ticket.ID IN
+            (
+                SELECT Purchase.ticket_id
+                FROM Purchase
+                WHERE Purchase.email = ?
+            )
+        )`,
+      [req.body.airline_name, req.body.email],
+      (err, rows) => {
+        if (!err) {
+          res.send({
+            flights: rows,
+            cust_email: req.body.email,
+          });
+        } else {
+          res.send(err);
+          console.log(err);
+        }
+      }
+    );
+  } else {
+    connection.query(
+      `SELECT *
+        FROM Flight
+        WHERE flight_num IN
+        (
+            SELECT Ticket.flight_num
+            FROM Ticket
+            WHERE Ticket.ID IN
+            (
+                SELECT Purchase.ticket_id
+                FROM Purchase
+                WHERE Purchase.email = ?
+            )
+        )`,
 
+      [req.body.email],
+      (err, rows) => {
+        if (!err) {
+          res.send({
+            flights: rows,
+            cust_email: req.body.email,
+          });
+        } else {
+          res.send(err);
+          console.log(err);
+        }
+      }
+    );
+  }
+});
 app.post("/newstaff", (req, res) => {
   console.log(req.body);
   db.push("/staff", [req.body], false);
