@@ -16,35 +16,11 @@ import { useNavigate } from "react-router-dom";
 
 function StaffHome() {
   let navigate = useNavigate();
-  const [details, setDetails] = useState({
-    status: "",
-  });
-
-  async function getStatus() {
-    const resBody = await axios.post("http://localhost:3001/staffcheck");
-    const res = resBody.data;
-    if (res === true) {
-      console.log("logged in");
-      details.status = "true";
-    } else {
-      alert("you are not logged in");
-      console.log("navigating to home");
-      navigate("/home");
-      details.status = "false";
-    }
+  if (localStorage.getItem("loggedIn") === "false") {
+    console.log("not logged in!");
+    alert("you are not logged in");
+    navigate("/home");
   }
-
-  useEffect(() => {
-    if (details.status === "") {
-      getStatus();
-    }
-  });
-
-  useEffect(() => {
-    if (details.status === "false") {
-      navigate("/home");
-    }
-  });
 
   return (
     <div className="card">

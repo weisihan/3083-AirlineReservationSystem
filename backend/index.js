@@ -5,6 +5,7 @@ const { JsonDB } = require("node-json-db");
 const { Config } = require("node-json-db/dist/lib/JsonDBConfig");
 const mysql = require("mysql");
 const md5 = require("md5");
+const moment = require("moment");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -26,11 +27,21 @@ app.use(cors());
 
 app.get("/home", (req, res) => {
   // select all the flight data
-  // future 30 days!!!
+  let departDate = new Date();
+  let future30 = new Date();
+  departDate = moment(departDate).format("YYYY-MM-DD");
+  future30 = moment(departDate).format("YYYY-MM-DD");
+  future30 = moment(future30).add(30, "days");
+  console.log(future30);
+
   connection.query("SELECT * FROM Flight", (err, rows) => {
     if (!err) {
-      res.send(rows);
-      console.log(rows);
+      let filteredRows = rows.filter(
+        (row) => future30.diff(moment(row["dept_date"]), "days") < 30
+      );
+      console.log(filteredRows[0]);
+
+      res.send(filteredRows);
     } else {
       res.status(500).send(err);
       console.log(err);
@@ -39,26 +50,31 @@ app.get("/home", (req, res) => {
 });
 
 app.post("/stafflogin", (req, res) => {
-  console.log("post");
-  console.log(req.body.username);
-  console.log(req.body.password);
-
-  // check if username and password are correct
-  var data = db.getData("/");
-  for (const item in data.staff) {
-    if (data.staff[item].username === req.body.username) {
-      if (data.staff[item].password === req.body.password) {
-        console.log("Login successful");
-        res.send(true);
-        currUser = req.body.username;
-        currRole = "staff";
-        return;
+  const { username, password } = req.body;
+  const hashedPassword = md5(password); // hash the password
+  connection.query(
+    `SELECT * FROM AirlineStaff WHERE username = '${username}'`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        if (result.length === 0) {
+          res.status(400).send("Invalid username or password");
+        }
+        if (result[0].staff_password === hashedPassword) {
+          // send back the user information without the password
+          console.log("login success");
+          res.send(true);
+        } else {
+          res.status(400).send("Incorrect password");
+        }
       }
+      return;
     }
-  }
-  console.log("Invalid username or password");
-  res.send(false);
+  );
 });
+
 app.post("/displayFlight", (req, res) => {
   let data = db.getData("/");
   res.send(data.flight);
@@ -241,19 +257,42 @@ app.post("/clientlogin", (req, res) => {
 });
 
 app.post("/newstaff", (req, res) => {
-  console.log(req.body);
-  db.push("/staff", [req.body], false);
-  res.send("newstaff");
-});
-app.post("/money", (req, res) => {
-  let moneyArray = [];
-  var data = db.getData("/");
-  for (const item in data.ticket) {
-    if (data.ticket[item].userEmail == req.body.email) {
-      moneyArray.push(data.ticket[item].price);
+  const { username, password, first_name, last_name, birth, airline_name } =
+    req.body;
+  const birth_mysql = `${birth.slice(0, 4)}/${birth.slice(5, 7)}/${birth.slice(
+    8,
+    10
+  )}`;
+
+  const hashedPassword = md5(password);
+  connection.query(
+    `SELECT * FROM AirlineStaff WHERE username = '${username}'`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else if (result.length > 0) {
+        res.status(400).send("User already exists");
+      } else {
+        const query = `INSERT INTO AirlineStaff(username,staff_password,first_name,last_name,DOB,airline_name) VALUES (
+                    '${username}',
+                    '${hashedPassword}',
+                    '${first_name}',
+                    '${last_name}',
+                    '${birth_mysql}',
+                    '${airline_name}'
+                )`;
+        connection.query(query, (err, result) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send(err);
+          } else {
+            res.status(200).send(result);
+          }
+        });
+      }
     }
-  }
-  res.send(moneyArray);
+  );
 });
 
 app.post("/newclient", (req, res) => {
