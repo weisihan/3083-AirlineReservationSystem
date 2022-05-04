@@ -3,15 +3,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Table from "../../Components/Table.component";
 
-async function AllFlights() {
-  const [details, setDetails] = useState({
-    allflights: {},
-  });
-  let flights = await axios.get("http://localhost:3001/home", details);
-
-  return flights.data;
-}
-
 function Home() {
   const [flightData, setFlightData] = useState([]);
 
