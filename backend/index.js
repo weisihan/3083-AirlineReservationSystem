@@ -210,7 +210,6 @@ app.post("/clientlogin", (req, res) => {
           birth,
         } = result[0];
 
-
         const c_info = {
           c_name,
           email,
@@ -235,7 +234,6 @@ app.post("/clientlogin", (req, res) => {
         }
       }
       return;
-      }
     }
   );
 });
