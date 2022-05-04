@@ -3,36 +3,37 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const { JsonDB } = require("node-json-db");
 const { Config } = require("node-json-db/dist/lib/JsonDBConfig");
-// The first argument is the database filename. If no extension, '.json' is assumed and automatically added.
-// The second argument is used to tell the DB to save after each push
-// If you put false, you'll have to call the save() method.
-// The third argument is to ask JsonDB to save the database in an human readable format. (default false)
-// The last argument is the separator. By default it's slash (/)
+const mysql = require("mysql");
+const md5 = require("md5");
+
+const connection = mysql.createConnection({
+  host: "localhost",
+  port: 8889,
+  user: "root",
+  password: "root",
+  database: "airline_reservation",
+  connectionLimit: 30,
+});
+const app = express();
+
+app.use(express.json());
+app.use(cors());
+
 var db = new JsonDB(new Config("myDataBase", true, false, "/"));
 var currUser = ""; // username
 var currRole = ""; //staff or client
 var currComp = ""; // staff's company
 
-// var mysql = require("mysql");
-
-// const connection = mysql.createConnection({
-//   host: "localhost",
-//   port: 8889,
-//   user: "root",
-//   password: "root",
-//   database: "airlineReservation",
-//   connectionLimit: 30,
-// });
-
-var db = new JsonDB(new Config("myDataBase", true, false, "/"));
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-
-app.get("/", (req, res) => {
-  console.log("get");
-  var data = db.getData("/");
-  res.send(data);
+app.get("/home", (req, res) => {
+  // select all the flight data
+  connection.query("SELECT * FROM Flight", (err, rows) => {
+    if (!err) {
+      res.send(rows);
+    } else {
+      res.status(500).send(err);
+      console.log(err);
+    }
+  });
 });
 
 app.post("/stafflogin", (req, res) => {
@@ -184,27 +185,98 @@ app.post("/clientPurchaseTicket", (req, res) => {
   console.log("ticket purchase");
   //res.send(currUser);
 });
-app.post("/clientlogin", (req, res) => {
-  console.log("post");
-  console.log(req.body.email);
-  console.log(req.body.password);
 
-  // check if username and password are correct
-  var data = db.getData("/");
-  for (const item in data.client) {
-    if (data.client[item].email === req.body.email) {
-      if (data.client[item].password === req.body.password) {
-        console.log("Login successful");
-        console.log("after success,", data.client[item].email);
-        res.send(data.client[item].email);
-        currUser = req.body.email;
-        currRole = "client";
-        return;
+app.post("/clientlogin", (req, res) => {
+  const { email, password } = req.body;
+  const hashedPassword = md5(password); // hash the password
+  connection.query(
+    `SELECT * FROM Customer WHERE email = '${email}'`, // find the client
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        const {
+          c_name,
+          cust_password,
+          building_num,
+          street,
+          city,
+          state,
+          phone_num,
+          passport_num,
+          passport_exp,
+          passport_country,
+          birth,
+        } = result[0];
+
+        const c_info = {
+          c_name,
+          email,
+          building_num,
+          street,
+          city,
+          state,
+          phone_num,
+          passport_num,
+          passport_exp,
+          passport_country,
+          birth,
+        };
+
+        if (cust_password === hashedPassword) {
+          console.log("login success");
+          res.send(true);
+          // currUser = req.body.email;
+          // currRole = "client";
+        } else {
+          res.status(400).send("Incorrect password");
+        }
+      }
+      return;
+
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else if (result.length === 0) {
+        res.status(400).send("This email is not registered!");
+      } else {
+        if (result[0].c_password === hashedPassword) {
+          // const {
+          //   c_name,
+          //   building_num,
+          //   street,
+          //   city,
+          //   state,
+          //   phone_num,
+          //   passport_num,
+          //   passport_exp,
+          //   passport_country,
+          //   birth,
+          // } = result[0];
+          // const c_info = {
+          //   c_name,
+          //   email,
+          //   building_num,
+          //   street,
+          //   city,
+          //   state,
+          //   phone_num,
+          //   passport_num,
+          //   passport_exp,
+          //   passport_country,
+          //   birth,
+          // };
+          console.log("Login successful");
+          res.send(true);
+          //res.send(c_info);
+        } else {
+          // send back a message saying the password is incorrect
+          res.status(400).send("Incorrect password");
+        }
       }
     }
-  }
-  console.log("Invalid username or password");
-  res.send(false);
+  );
 });
 
 app.post("/newstaff", (req, res) => {
@@ -224,9 +296,64 @@ app.post("/money", (req, res) => {
 });
 
 app.post("/newclient", (req, res) => {
-  console.log(req.body);
-  db.push("/client", [req.body], false);
-  res.send("newclient");
+  const {
+    email,
+    password,
+    name,
+    building_num,
+    street,
+    city,
+    state,
+    phone_num,
+    passport_num,
+    passport_exp,
+    passport_country,
+    birthday,
+  } = req.body;
+  const birthday_mysql = `${birthday.slice(0, 4)}/${birthday.slice(
+    5,
+    7
+  )}/${birthday.slice(8, 10)}`; // format: YYYY/MM/DD
+  const passport_exp_mysql = `${passport_exp.slice(0, 4)}/${passport_exp.slice(
+    5,
+    7
+  )}/${passport_exp.slice(8, 10)}`;
+  const hashedPassword = md5(password); // hash the password
+  connection.query(
+    `SELECT * FROM Customer WHERE email = '${email}'`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else if (result.length > 0) {
+        res.status(400).send("This email has been registered!");
+      } else {
+        const query = `INSERT INTO Customer(email,cust_password,cust_name,building_num,street,city,state,phone_num,passport_num,passport_exp,passport_country,DOB) VALUES (
+            '${email}',
+            '${hashedPassword}', 
+            '${name}',
+            ${building_num},
+            '${street}',
+            '${city}',
+            '${state}',
+            ${phone_num},
+            '${passport_num}',
+            '${passport_exp_mysql}',
+            '${passport_country}',
+            '${birthday_mysql}'
+        )`;
+        // use md5 to hash the password
+        connection.query(query, (err, result) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send(err);
+          } else {
+            res.status(200).send(result);
+          }
+        });
+      }
+    }
+  );
 });
 
 app.post("/newflight", (req, res) => {

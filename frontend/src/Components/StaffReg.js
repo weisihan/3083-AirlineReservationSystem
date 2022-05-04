@@ -22,13 +22,13 @@ function StaffReg(props) {
       }
     }
 
-    const data = await axios.get("http://localhost:3001/", details);
-    for (const item in data.data.staff) {
-      if (data.data.staff[item].username === details.username) {
-        alert("username already exists");
-        return;
-      }
-    }
+    // const data = await axios.get("http://localhost:3001/", details);
+    // for (const item in data.data.staff) {
+    //   if (data.data.staff[item].username === details.username) {
+    //     alert("username already exists");
+    //     return;
+    //   }
+    // }
 
     const res = await axios.post("http://localhost:3001/newstaff", details);
     console.log(res); // backend stuff to be done

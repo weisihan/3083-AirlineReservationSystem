@@ -19,13 +19,13 @@ function NewAirplane() {
       }
     }
 
-    const data = await axios.get("http://localhost:3001/", details);
-    for (const item in data.data.airport) {
-      if (data.data.airport[item].code === details.code) {
-        alert("Airport already exists");
-        return;
-      }
-    }
+    // const data = await axios.get("http://localhost:3001/", details);
+    // for (const item in data.data.airport) {
+    //   if (data.data.airport[item].code === details.code) {
+    //     alert("Airport already exists");
+    //     return;
+    //   }
+    // }
 
     const res = await axios.post("http://localhost:3001/newairport", details);
     console.log(res);

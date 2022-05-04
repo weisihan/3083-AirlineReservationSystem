@@ -8,8 +8,6 @@ function ClientLog(props) {
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({
-    fname: "",
-    lname: "",
     email: "",
     password: "",
   });
@@ -22,22 +20,25 @@ function ClientLog(props) {
       }
     }
 
-    let general = await axios.all([
-      await axios.post("http://localhost:3001/clientlogin", details),
-      await axios.post("http://localhost:3001/clientFlightBack", details),
-    ]);
-    console.log("general", general);
-    const resBody = general[0];
+    // let general = await axios.all([
+    //   await axios.post("http://localhost:3001/clientlogin", details),
+    //   await axios.post("http://localhost:3001/clientFlightBack", details),
+    // ]);
+    // console.log("general", general);
+    // const resBody = general[0];
     // const forFlight = await axios.post(
     //   "http://localhost:3001/clientFlightBack",
     //   details
     // );
     // );
+    let res = await axios.post("http://localhost:3001/clientlogin", details);
+    res = res.data;
+    console.log(res);
+    const setLocalStorage = res ? true : false;
+    localStorage.setItem("loggedIn", setLocalStorage);
+    // localStorage.getItem("rememberMe");
 
-    console.log("detailsLog", details);
-    const res = resBody.data;
-    console.log("res", res);
-    if (res != false) {
+    if (res) {
       console.log("you are logged in");
       navigate("/clienthome");
     } else {
@@ -49,30 +50,6 @@ function ClientLog(props) {
     <div className="card">
       <div className="actions">
         <h2>Logging in as a client</h2>
-        <div className="form-inner">
-          <div className="form-group">
-            <label htmlFor="fname"> First Name: </label>
-            <input
-              type="text"
-              name="fname"
-              id="fname"
-              onChange={(e) =>
-                setDetails({ ...details, fname: e.target.value })
-              }
-              value={details.fname}
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="lname"> Last Name: </label>
-          <input
-            type="text"
-            name="lname"
-            id="lname"
-            onChange={(e) => setDetails({ ...details, lname: e.target.value })}
-            value={details.lname}
-          />
-        </div>
         <div className="form-group">
           <label htmlFor="email"> Email: </label>
           <input
@@ -83,6 +60,7 @@ function ClientLog(props) {
             value={details.email}
           />
         </div>
+        <br />
         <div className="form-group">
           <label htmlFor="password"> Password: </label>
           <input
