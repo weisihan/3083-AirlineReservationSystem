@@ -239,54 +239,64 @@ app.post("/clientPurchaseTicket", (req, res) => {
 app.post("/clientlogin", (req, res) => {
   const { email, password } = req.body;
   const hashedPassword = md5(password); // hash the password
-  res.send(true);
-  // connection.query(
-  //   `SELECT * FROM Customer WHERE email = '${email}'`, // find the client
-  //   (err, result) => {
-  //     if (err) {
-  //       console.log(err);
-  //       res.status(500).send(err);
-  //     } else {
-  //       const {
-  //         c_name,
-  //         cust_password,
-  //         building_num,
-  //         street,
-  //         city,
-  //         state,
-  //         phone_num,
-  //         passport_num,
-  //         passport_exp,
-  //         passport_country,
-  //         birth,
-  //       } = result[0];
+  try {
+    connection.query(
+      `SELECT * FROM Customer WHERE email = '${email}'`, // find the client
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send(err);
+          return;
+        } else {
+          if (result.length === 0) {
+            res.status(500).send("No user found");
+            return;
+          }
 
-  //       const c_info = {
-  //         c_name,
-  //         email,
-  //         building_num,
-  //         street,
-  //         city,
-  //         state,
-  //         phone_num,
-  //         passport_num,
-  //         passport_exp,
-  //         passport_country,
-  //         birth,
-  //       };
+          const {
+            c_name,
+            cust_password,
+            building_num,
+            street,
+            city,
+            state,
+            phone_num,
+            passport_num,
+            passport_exp,
+            passport_country,
+            birth,
+          } = result[0];
 
-  //       if (cust_password === hashedPassword) {
-  //         console.log("login success");
-  //         res.send(true);
-  //         // currUser = req.body.email;
-  //         // currRole = "client";
-  //       } else {
-  //         res.status(400).send("Incorrect password");
-  //       }
-  //     }
-  //     return;
-  //   }
-  // );
+          const c_info = {
+            c_name,
+            email,
+            building_num,
+            street,
+            city,
+            state,
+            phone_num,
+            passport_num,
+            passport_exp,
+            passport_country,
+            birth,
+          };
+
+          if (cust_password === hashedPassword) {
+            console.log("login success");
+            res.send(true);
+            return;
+          } else {
+            res.status(400).send("Incorrect password");
+            return;
+          }
+        }
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("ERROR");
+    return;
+  }
 });
 
 app.post("/newstaff", (req, res) => {
