@@ -12,94 +12,91 @@ import { fontWeight } from "@mui/system";
 // console.log('what',json.flight[1].passenger);
 
 function MyFlights() {
-  let navigate = useNavigate();
-  const [details, setDetails] = useState({
-    fname: "",
-    lname: "",
-    email: "",
-    cancel: "",
-  });
-  async function cancelFlight() {
-    let cancelBtn = document.getElementById("cancelBtn");
-    cancelBtn.style.display = "inline";
-    let cancelForm = document.getElementById("cancelForm");
-    cancelForm.style.display = "inline";
-  }
-  async function confirmCancel() {
-    console.log("cancel front");
-    const newUserEmail = await axios.post(
-      "http://localhost:3001/clientFlightBack",
-      details
-    );
-    console.log("cancel another");
-    details.email = newUserEmail.data;
-    // console.log(newUserEmail.data);
-    const cancelFlight = await axios.post(
-      "http://localhost:3001/cancelFlight",
-      details
-    );
-    console.log("aaa");
-    let warning = document.getElementById("warning");
+  // const [details, setDetails] = useState({
+  //   fname: "",
+  //   lname: "",
+  //   email: "",
+  //   cancel: "",
+  // });
+  // async function cancelFlight() {
+  //   let cancelBtn = document.getElementById("cancelBtn");
+  //   cancelBtn.style.display = "inline";
+  //   let cancelForm = document.getElementById("cancelForm");
+  //   cancelForm.style.display = "inline";
+  // }
+  // async function confirmCancel() {
+  //   console.log("cancel front");
+  //   const newUserEmail = await axios.post(
+  //     "http://localhost:3001/clientFlightBack",
+  //     details
+  //   );
+  //   console.log("cancel another");
+  //   details.email = newUserEmail.data;
+  //   // console.log(newUserEmail.data);
+  //   const cancelFlight = await axios.post(
+  //     "http://localhost:3001/cancelFlight",
+  //     details
+  //   );
+  //   console.log("aaa");
+  //   let warning = document.getElementById("warning");
 
-    warning.innerHTML = "";
-    console.log("Olivia Cancel", cancelFlight.data);
-    if (cancelFlight.data == "fail") {
-      warning.innerHTML +=
-        "You did not purchase this flight! You can not cancel";
-    } else {
-      warning.innerHTML += "You Sucessfully Cancelled the Flight!";
-    }
-  }
-  async function flight() {
-    const currUser = await axios.post("http://localhost:3001/clientFlightBack");
-    // console.log(1);
-    let userEmail = currUser.data;
-    console.log("currUser", currUser.data);
-    // const res = resBody.data;
-    // console.log("resNew",res);
-    let clientFlight = document.getElementById("futureFlight");
-    clientFlight.innerHTML = "";
-    clientFlight.innerHTML += "Your Future Flight: <br>";
-    details.email = userEmail;
-    const sendInfo = await axios.post("http://localhost:3001/displayFlight");
-    let flightInfo = sendInfo.data;
-    console.log("flight", flightInfo);
-    for (let i = 0; i < flightInfo.length; i++) {
-      //get the email from database first
-      // console.log("pass",json.flight[0].passenger)
-      for (
-        let tmpItem = 0;
-        tmpItem < flightInfo[i].passenger.length;
-        tmpItem++
-      ) {
-        // console.log("tmpEmail",data.data.client[j].email);
-        if (flightInfo[i].passenger[tmpItem] == userEmail) {
-          clientFlight.innerHTML +=
-            "Arrival Date: " + flightInfo[i].arrivalDate + "<br>";
-          clientFlight.innerHTML +=
-            "Arrival Airport: " + flightInfo[i].arriveairport + "<br>";
-          clientFlight.innerHTML +=
-            "Departure Date: " + flightInfo[i].departureDate + "<br>";
-          clientFlight.innerHTML +=
-            "Departure Airport: " + flightInfo[i].departairport + "<br>";
-          clientFlight.innerHTML +=
-            "Flight Number: " + flightInfo[i].flightnum + "<br>";
-          clientFlight.innerHTML +=
-            "Airline Company: " + flightInfo[i].company + "<br>";
-        }
-      }
-    }
-    // alert("Email already exists");
-    return;
-    //   }
-    // }
-  }
-  flight();
+  //   warning.innerHTML = "";
+  //   console.log("Olivia Cancel", cancelFlight.data);
+  //   if (cancelFlight.data == "fail") {
+  //     warning.innerHTML +=
+  //       "You did not purchase this flight! You can not cancel";
+  //   } else {
+  //     warning.innerHTML += "You Sucessfully Cancelled the Flight!";
+  //   }
+  // }
+  // async function flight() {
+  //   const currUser = await axios.post("http://localhost:3001/clientFlightBack");
+  //   // console.log(1);
+  //   let userEmail = currUser.data;
+  //   console.log("currUser", currUser.data);
+  //   // const res = resBody.data;
+  //   // console.log("resNew",res);
+  //   let clientFlight = document.getElementById("futureFlight");
+  //   clientFlight.innerHTML = "";
+  //   clientFlight.innerHTML += "Your Future Flight: <br>";
+  //   details.email = userEmail;
+  //   const sendInfo = await axios.post("http://localhost:3001/displayFlight");
+  //   let flightInfo = sendInfo.data;
+  //   console.log("flight", flightInfo);
+  //   for (let i = 0; i < flightInfo.length; i++) {
+  //     //get the email from database first
+  //     // console.log("pass",json.flight[0].passenger)
+  //     for (
+  //       let tmpItem = 0;
+  //       tmpItem < flightInfo[i].passenger.length;
+  //       tmpItem++
+  //     ) {
+  //       // console.log("tmpEmail",data.data.client[j].email);
+  //       if (flightInfo[i].passenger[tmpItem] == userEmail) {
+  //         clientFlight.innerHTML +=
+  //           "Arrival Date: " + flightInfo[i].arrivalDate + "<br>";
+  //         clientFlight.innerHTML +=
+  //           "Arrival Airport: " + flightInfo[i].arriveairport + "<br>";
+  //         clientFlight.innerHTML +=
+  //           "Departure Date: " + flightInfo[i].departureDate + "<br>";
+  //         clientFlight.innerHTML +=
+  //           "Departure Airport: " + flightInfo[i].departairport + "<br>";
+  //         clientFlight.innerHTML +=
+  //           "Flight Number: " + flightInfo[i].flightnum + "<br>";
+  //         clientFlight.innerHTML +=
+  //           "Airline Company: " + flightInfo[i].company + "<br>";
+  //       }
+  //     }
+  //   }
+  //   // alert("Email already exists");
+  //   return;
+  //   //   }
+  //   // }
 
   return (
     <div className="card">
       <h1>My flights </h1>
-      <div id="warning" style={{ color: "red", fontWeight: "bold" }}></div>
+      {/* <div id="warning" style={{ color: "red", fontWeight: "bold" }}></div>
       <h2>Displaying all flights of the user</h2>
       <div id="futureFlight"></div>
       <div id="cancelForm" style={{ display: "none", fontWeight: "bold" }}>
@@ -117,8 +114,11 @@ function MyFlights() {
           />
         </div>
       </div>
-      <br></br>
-      <button
+      <br></br> */}
+      <Link to="/review">
+        <button className="btn">Review Flights</button>
+      </Link>
+      {/* <button
         className="btn"
         id="cancelBtn"
         style={{ display: "none" }}
@@ -128,17 +128,17 @@ function MyFlights() {
         Confirm Cancel{" "}
       </button>
       <br></br>
-      <br></br>
+      <br></br> */}
       <div className="actions">
         <Link to="/clienthome">
           <button className="btn">Go to client home</button>
         </Link>
       </div>
       <br></br>
-      <button className="btn" onClick={cancelFlight}>
+      {/* <button className="btn" onClick={cancelFlight}>
         {" "}
         Cancel Flight{" "}
-      </button>
+      </button> */}
     </div>
   );
 }

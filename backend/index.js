@@ -136,7 +136,7 @@ app.post("/cancelFlight", (req, res) => {
 });
 app.post("/clientFlightBack", (req, res) => {
   console.log("finally worked");
-  res.send(currUser);
+  res.send("hi");
   // var data = db.getData("/");
   // for (const item in data.client) {
   //   if (data.client[item].email === req.body.email) {
@@ -162,72 +162,38 @@ app.post("/clientSearchFlight", (req, res) => {
       res.send(result);
     }
   );
-  // connection.query(
-  //   `SELECT * FROM airline_reservation.Flight WHERE dept_airport='${sourceCity}' AND arr_airport ='${destination}' dept_date.split("T")[0] = '${departureDate}' AND dept_date.split("T")[0] = '${departureDate}' AND ;`,
-  //   (err, result) => {
-  //     if (err) {
-  //       console.log(err);
-  //       res.status(500).send(err);
-  //     } else {
-  //       console.log("flights", result);
-  //       res.send(result);
-  //     }
-  //   }
-  // );
-
-  // const {
-  //   c_name,
-  //   cust_password,
-  //   building_num,
-  //   street,
-  //   city,
-  //   state,
-  //   phone_num,
-  //   passport_num,
-  //   passport_exp,
-  //   passport_country,
-  //   birth,
-  // }
-  //= result[0];
-  //set up sql
-
-  // for (const item in data.flight) {
-  //   if (data.flight[item].departairport === req.body.sourcecity) {
-  //     console.log("1connected");
-  //     if (data.flight[item].arriveairport === req.body.descity) {
-  //       console.log("descity match");
-  //       if (data.flight[item].departureDate === req.body.depdate) {
-  //         console.log("depdate match");
-  //         if (data.flight[item].arrivalDate === req.body.arrivedate) {
-  //           console.log("connected");
-  //           console.log(data.flight[item].arriveairport);
-  //           dataArray.push(data.flight[item]);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // res.send(dataArray);
 });
 app.post("/clientReviewBack", (req, res) => {
-  let data = db.getData("/");
-  console.log("reviewbody", req.body);
-  for (const item in data.ticket) {
-    // console.log("dataemail",data.ticket[item].userEmail);
-    // console.log("reqemail",req.body.);
-    if (data.ticket[item].userEmail == req.body.userEmail) {
-      console.log(2);
-      if (data.ticket[item].flightNum == req.body.flightNum) {
-        console.log(3);
-        db.push("/review", [req.body]);
-        res.send("newreview");
-        console.log("review done");
-      } else {
-        console.log("review fail");
-        res.send("fail");
+  // console.log("Review", req.body);
+  let flightNum = req.body.flightNum;
+  let rating = req.body.rating;
+  let comment = req.body.comment;
+  let airlineName = req.body.airlineName;
+  let depDate = req.body.depDate;
+  let depTime = req.body.depTime;
+  let currUser = req.body.currentUser;
+  connection.query(
+    `INSERT INTO Feedback (email, flight_num, airline_name, dept_date, dept_time, comment, rating)
+    VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [currUser, flightNum, airlineName, depDate, depTime, comment, rating],
+    (err, rows) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error inserting");
+        return;
       }
+      res.status(200).send(true);
+      // if (!err) {
+      //   console.log(rows);
+      //   console.log("success");
+      //   res.send(rows);
+      // } else {
+      //   res.send({ status: 500, message: "Already rated" });
+      //   // console.log(err.message);
+      // }
     }
-  }
+  );
+  //find flight num
 });
 //this is for client purchase ticket
 app.post("/clientPurchaseTicket", (req, res) => {
