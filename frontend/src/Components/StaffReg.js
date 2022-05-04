@@ -8,10 +8,12 @@ function StaffReg(props) {
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({
-    fname: "",
-    lname: "",
     username: "",
     password: "",
+    first_name: "",
+    last_name: "",
+    birth: "",
+    airline_name: "",
   });
 
   async function Registered() {
@@ -43,39 +45,17 @@ function StaffReg(props) {
         <h2>Registering as a staff</h2>
         <div className="form-inner">
           <div className="form-group">
-            <label htmlFor="fname"> First Name: </label>
+            <label htmlFor="username"> Username: </label>
             <input
               type="text"
-              name="fname"
-              id="fname"
+              name="username"
+              id="username"
               onChange={(e) =>
-                setDetails({ ...details, fname: e.target.value })
+                setDetails({ ...details, username: e.target.value })
               }
-              value={details.fname}
+              value={details.username}
             />
           </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="lname"> Last Name: </label>
-          <input
-            type="text"
-            name="lname"
-            id="lname"
-            onChange={(e) => setDetails({ ...details, lname: e.target.value })}
-            value={details.lname}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="username"> Username: </label>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            onChange={(e) =>
-              setDetails({ ...details, username: e.target.value })
-            }
-            value={details.username}
-          />
         </div>
         <div className="form-group">
           <label htmlFor="password"> Password: </label>
@@ -87,6 +67,52 @@ function StaffReg(props) {
               setDetails({ ...details, password: e.target.value })
             }
             value={details.password}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="first_name"> First Name: </label>
+          <input
+            type="text"
+            name="first_name"
+            id="first_name"
+            onChange={(e) =>
+              setDetails({ ...details, first_name: e.target.value })
+            }
+            value={details.first_name}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="last_name"> Last Name: </label>
+          <input
+            type="text"
+            name="last_name"
+            id="last_name"
+            onChange={(e) =>
+              setDetails({ ...details, last_name: e.target.value })
+            }
+            value={details.last_name}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="birth"> Birthday: </label>
+          <input
+            type="text"
+            name="birth"
+            id="birth"
+            onChange={(e) => setDetails({ ...details, birth: e.target.value })}
+            value={details.birth}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="airline_name"> Company: </label>
+          <input
+            type="text"
+            name="airline_name"
+            id="airline_name"
+            onChange={(e) =>
+              setDetails({ ...details, airline_name: e.target.value })
+            }
+            value={details.airline_name}
           />
         </div>
         <br></br>

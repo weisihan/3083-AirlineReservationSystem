@@ -22,15 +22,14 @@ function StaffLog(props) {
       }
     }
 
-    const resBody = await axios.post(
-      "http://localhost:3001/stafflogin",
-      details
-    );
-    const res = resBody.data;
-    if (res) {
+    let resBody = await axios.post("http://localhost:3001/stafflogin", details);
+    resBody = resBody.data;
+    console.log(resBody);
+    const setLocalStorage = resBody ? true : false;
+    localStorage.setItem("loggedIn", setLocalStorage);
 
+    if (resBody) {
       console.log("you are logged in");
-
       navigate("/staffhome");
     } else {
       alert("wrong username or password");
