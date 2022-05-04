@@ -30,6 +30,7 @@ import Stack from "@mui/material/Stack";
 
 import AuthService from "./auth-service";
 import { UserProvider } from "./contexts/user.context";
+import { PurchaseProvider } from "./contexts/purchase.context";
 
 function RegisterLayout() {
   return (
@@ -75,37 +76,39 @@ function App() {
   return (
     <div>
       <UserProvider>
-        <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/clienthome" element={<ClientHome />} />
-          <Route path="/staffhome" element={<StaffHome />} />
-          <Route path="/logout" element={<Logout />} />
+        <PurchaseProvider>
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/clienthome" element={<ClientHome />} />
+            <Route path="/staffhome" element={<StaffHome />} />
+            <Route path="/logout" element={<Logout />} />
 
-          <Route path="/myflights" element={<MyFlights />} />
-          <Route path="/searchflights" element={<SearchFlights />} />
-          <Route path="/purchaseticket" element={<PurchaseTicket />} />
-          <Route path="/review" element={<Review />} />
-          <Route path="/trackspending" element={<TrackSpending />} />
+            <Route path="/myflights" element={<MyFlights />} />
+            <Route path="/searchflights" element={<SearchFlights />} />
+            <Route path="/purchaseticket" element={<PurchaseTicket />} />
+            <Route path="/review" element={<Review />} />
+            <Route path="/trackspending" element={<TrackSpending />} />
 
-          <Route path="/viewflights" element={<ViewFlights />} />
-          <Route path="/newflight" element={<NewFlight />} />
-          <Route path="/changestatus" element={<ChangeStatus />} />
-          <Route path="/newairplane" element={<NewAirplane />} />
-          <Route path="/newairport" element={<NewAirport />} />
-          <Route path="/viewfeedback" element={<ViewFeedback />} />
-          <Route path="/viewreport" element={<ViewReport />} />
+            <Route path="/viewflights" element={<ViewFlights />} />
+            <Route path="/newflight" element={<NewFlight />} />
+            <Route path="/changestatus" element={<ChangeStatus />} />
+            <Route path="/newairplane" element={<NewAirplane />} />
+            <Route path="/newairport" element={<NewAirport />} />
+            <Route path="/viewfeedback" element={<ViewFeedback />} />
+            <Route path="/viewreport" element={<ViewReport />} />
 
-          <Route path="/" element={<RegisterLayout />}>
-            <Route path="/register" element={<Register />} />
-            <Route path="/staffreg" element={<StaffReg />} />
-            <Route path="/clientreg" element={<ClientReg />} />
-          </Route>
-          <Route path="/" element={<LoginLayout />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/stafflog" element={<StaffLog />} />
-            <Route path="/clientlog" element={<ClientLog />} />
-          </Route>
-        </Routes>
+            <Route path="/" element={<RegisterLayout />}>
+              <Route path="/register" element={<Register />} />
+              <Route path="/staffreg" element={<StaffReg />} />
+              <Route path="/clientreg" element={<ClientReg />} />
+            </Route>
+            <Route path="/" element={<LoginLayout />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/stafflog" element={<StaffLog />} />
+              <Route path="/clientlog" element={<ClientLog />} />
+            </Route>
+          </Routes>
+        </PurchaseProvider>
       </UserProvider>
     </div>
   );

@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Table from "./Table.component";
 import { UserContext } from "../contexts/user.context";
-
+import { useNavigate } from "react-router-dom";
+import { PurchaseContext } from "../contexts/purchase.context";
 function SearchFlights() {
+  let navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
-  console.log(currentUser);
+  const { setPurchaseInfo } = useContext(PurchaseContext);
+
   const [formDetails, setDetails] = useState({
+    //REMBER TO CHANGE THIS!!!!!!!!!
     sourceCity: "LAX",
     destination: "PEK",
     departureDate: "2021-03-04",
@@ -16,12 +20,33 @@ function SearchFlights() {
 
   const [foundFlights, setFlights] = useState([]);
 
-  async function purchaseTicket(flightid, currentUser) {
+  async function purchaseTicket(
+    airline_name,
+    dept_airport,
+    arr_airport,
+    flight_num,
+    dept_date,
+    dept_time,
+    currentUser,
+    base_price
+  ) {
     if (!currentUser) {
       alert("NO USER IS LOGGED IN!!!");
+      navigate("/login");
+      // return;
     }
-    console.log(flightid);
+    //flight id is the flight num
     console.log("go purchase ticket...");
+    setPurchaseInfo({
+      airline_name,
+      dept_airport,
+      arr_airport,
+      flight_num,
+      dept_date,
+      dept_time,
+      base_price,
+    });
+    navigate("/purchaseticket");
   }
 
   async function sendRequest(formDetails) {
@@ -52,20 +77,52 @@ function SearchFlights() {
         // dept_time: "14:00:00";
         // flight_num: "DL456";
         // flight_status: "Delay";
-        const { airline_name, arr_airport, dept_airport, flight_num } = res[i];
-        aggregated.push([
+        const {
           airline_name,
           arr_airport,
           dept_airport,
+          dept_date,
+          dept_time,
+          base_price,
           flight_num,
+        } = res[i];
+
+        // [
+        //   "airline_name",
+        //   "dept",
+        //   "arrival",
+        //   "flight_num",
+
+        //   "dept_date",
+        //   "dept_time",
+        //   "purchase",
+        // ]
+        aggregated.push([
+          airline_name,
+          dept_airport,
+          arr_airport,
+          flight_num,
+          dept_date,
+          dept_time,
+          base_price,
           <button
             onClick={() => {
-              purchaseTicket(airline_name, currentUser);
+              purchaseTicket(
+                airline_name,
+                dept_airport,
+                arr_airport,
+                flight_num,
+                dept_date,
+                dept_time,
+                currentUser,
+                base_price
+              );
             }}
           >
-            hello
+            Purchase
           </button>,
         ]);
+        console.log(aggregated);
       }
     }
 
@@ -147,7 +204,17 @@ function SearchFlights() {
         <button className="btn">Go to client home</button>
       </Link>
       <Table
-        heading={["airline_name", "dept", "arrival", "flight_num", "purchase"]}
+        heading={[
+          "airline_name",
+          "dept",
+          "arrival",
+          "flight_num",
+
+          "dept_date",
+          "dept_time",
+          "base_price",
+          "purchase",
+        ]}
         body={foundFlights}
       />
     </div>
