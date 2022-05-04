@@ -228,11 +228,13 @@ app.post("/clientReviewBack", (req, res) => {
     }
   }
 });
+//this is for client purchase ticket
 app.post("/clientPurchaseTicket", (req, res) => {
   console.log("ticketBody", req.body);
-  db.push("/ticket", [req.body]);
-  res.send("newclient");
-  console.log("ticket purchase");
+  res.send(req.body);
+  // db.push("/ticket", [req.body]);
+  // res.send("newclient");
+  // console.log("ticket purchase");
   //res.send(currUser);
 });
 

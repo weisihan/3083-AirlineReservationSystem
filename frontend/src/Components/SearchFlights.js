@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Table from "./Table.component";
 import { UserContext } from "../contexts/user.context";
-
+import { useNavigate } from "react-router-dom";
+import { PurchaseContext } from "../contexts/purchase.context";
 function SearchFlights() {
+  let navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
-  console.log(currentUser);
+  const { setPurchaseInfo } = useContext(PurchaseContext);
+
   const [formDetails, setDetails] = useState({
+    //REMBER TO CHANGE THIS!!!!!!!!!
     sourceCity: "LAX",
     destination: "PEK",
     departureDate: "2021-03-04",
@@ -20,8 +24,25 @@ function SearchFlights() {
     if (!currentUser) {
       alert("NO USER IS LOGGED IN!!!");
     }
+    //flight id is the flight num
     console.log(flightid);
     console.log("go purchase ticket...");
+    await axios
+      .post("http://localhost:3001/clientPurchaseTicket", {
+        flightid,
+        currentUser,
+      })
+      .then((res) => {
+        console.log(res);
+        setPurchaseInfo({
+          flight_pk: "test1",
+          userid: "test",
+        });
+        navigate("/purchaseticket");
+      })
+      .catch((err) => {
+        alert("ERROR PURCHASING... try again");
+      });
   }
 
   async function sendRequest(formDetails) {
@@ -60,11 +81,9 @@ function SearchFlights() {
           flight_num,
           <button
             onClick={() => {
-              purchaseTicket(airline_name, currentUser);
+              purchaseTicket(flight_num, currentUser);
             }}
-          >
-            hello
-          </button>,
+          ></button>,
         ]);
       }
     }
