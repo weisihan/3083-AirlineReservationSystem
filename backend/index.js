@@ -5,6 +5,7 @@ const { JsonDB } = require("node-json-db");
 const { Config } = require("node-json-db/dist/lib/JsonDBConfig");
 const mysql = require("mysql");
 const md5 = require("md5");
+const moment = require("moment");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -231,7 +232,91 @@ app.post("/clientReviewBack", (req, res) => {
 //this is for client purchase ticket
 app.post("/clientPurchaseTicket", (req, res) => {
   console.log("ticketBody", req.body);
-  res.send(req.body);
+  // res.send(req.body);
+  let purchase_date = new Date();
+  let purchase_time = new Date();
+  purchase_date = moment(purchase_date).format("YYYY-MM-DD");
+  purchase_time = moment(purchase_time).format("HH:mm:ss");
+  let dept_date = req.body.dept_date.split("T")[0];
+  let ticket_id = Math.floor(Math.random() * 1000000);
+  let expireDate = req.body.expDate;
+  expireDate = moment(expireDate).format("YYYY-MM-DD");
+  // firstName: 'sad',
+  // lastName: 'asd',
+  // cardNumber: 'asd',
+  // cardType: 'asd',
+  // expDate: 'asd',
+  // airline_name: '',
+  // dept_airport: '',
+  // arr_airport: '',
+  // flight_num: '',
+  // dept_date: '',
+  // dept_time: ''
+
+  // Pull off all the variables above
+  const {
+    firstName,
+    lastName,
+    cardNumber,
+    cardType,
+    expDate,
+    airline_name,
+    dept_airport,
+    arr_airport,
+    flight_num,
+    dept_time,
+    base_price,
+    email,
+  } = req.body;
+
+  connection.query(
+    `insert into Ticket (sold_price, card_number, card_type, exp_date, name_on_card, purchase_date, purchase_time, airline_name, flight_num, dept_date, dept_time,ID)
+    values (?,?,?,?,?,?,?,?,?,?,?,?)
+    `,
+    [
+      base_price,
+      cardNumber,
+      cardType,
+      expDate,
+      firstName + " " + lastName,
+      purchase_date,
+      purchase_time,
+      airline_name,
+      flight_num,
+      dept_date,
+      dept_time,
+      ticket_id,
+      email,
+    ],
+    (err, rows) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        connection.query(
+          `insert into Purchase (email,ticket_id)
+          values (?,?)`,
+          [email, ticket_id],
+          (err, rows) => {
+            if (!err) {
+              res.send({
+                success: true,
+              });
+            } else {
+              res.send(err);
+              console.log(err);
+            }
+          }
+        );
+      }
+      // if (!err) {
+
+      // } else {
+      //   res.send(err);
+      //   console.log(err);
+      // }
+    }
+  );
   // db.push("/ticket", [req.body]);
   // res.send("newclient");
   // console.log("ticket purchase");
