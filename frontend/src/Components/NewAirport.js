@@ -28,6 +28,7 @@ function NewFlight() {
     // }
 
     const res = await axios.post("http://localhost:3001/newairport", details);
+
     console.log(res);
     alert("Successfully added");
     navigate("/staffhome");
