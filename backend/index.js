@@ -19,16 +19,18 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-var db = new JsonDB(new Config("myDataBase", true, false, "/"));
-var currUser = ""; // username
-var currRole = ""; //staff or client
-var currComp = ""; // staff's company
+// var db = new JsonDB(new Config("myDataBase", true, false, "/"));
+// var currUser = ""; // username
+// var currRole = ""; //staff or client
+// var currComp = ""; // staff's company
 
 app.get("/home", (req, res) => {
   // select all the flight data
+  // future 30 days!!!
   connection.query("SELECT * FROM Flight", (err, rows) => {
     if (!err) {
       res.send(rows);
+      console.log(rows);
     } else {
       res.status(500).send(err);
       console.log(err);
@@ -329,9 +331,6 @@ app.post("/newairport", (req, res) => {
 
 app.post("/logout", (req, res) => {
   console.log("logout");
-  currUser = "";
-  currRole = "";
-  console.log("currRole: " + currRole);
 });
 
 app.post("/staffcheck", (req, res) => {
