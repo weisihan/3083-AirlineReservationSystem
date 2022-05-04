@@ -5,10 +5,10 @@ import { PurchaseContext } from "../contexts/purchase.context";
 import React, { useEffect, useState, useContext } from "react";
 
 function PurchaseTicket(props) {
-  console.log(props);
+  // console.log(props);
   const { currentUser } = useContext(UserContext);
   const { purchaseInfo } = useContext(PurchaseContext);
-  console.log(purchaseInfo);
+  // console.log(purchaseInfo);
   let [purchaseForm, setPurchaseInfo] = useState({
     firstName: "",
     lastName: "",
@@ -25,7 +25,7 @@ function PurchaseTicket(props) {
   };
 
   function purchaseReq(purchaseInfo) {
-    console.log(purchaseInfo);
+    // console.log(purchaseInfo);
     axios.post("http://localhost:3001/clientPurchaseTicket", purchaseInfo);
   }
 

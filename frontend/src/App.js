@@ -10,6 +10,7 @@ import ClientLog from "./Components/ClientLog";
 import ClientReg from "./Components/ClientReg";
 import StaffLog from "./Components/StaffLog";
 import StaffReg from "./Components/StaffReg";
+import Cancel from "./Components/ClientCancel";
 
 import MyFlights from "./Components/MyFlights";
 import SearchFlights from "./Components/SearchFlights";
@@ -87,6 +88,7 @@ function App() {
             <Route path="/searchflights" element={<SearchFlights />} />
             <Route path="/purchaseticket" element={<PurchaseTicket />} />
             <Route path="/review" element={<Review />} />
+            <Route path="/cancel" element={<Cancel />} />
             <Route path="/trackspending" element={<TrackSpending />} />
 
             <Route path="/viewflights" element={<ViewFlights />} />
