@@ -11,18 +11,6 @@ function Home() {
       let flights = await axios.get("http://localhost:3001/home");
       flights = flights.data;
       console.log(flights);
-      // airline_name: "Air China";
-      // airplane_airline_name: "Air China";
-      // airplane_id: "3";
-      // arr_airport: "LAX";
-      // arr_date: "2021-11-12T05:00:00.000Z";
-      // arr_time: "16:50:25";
-      // base_price: 300;
-      // dept_airport: "SFO";
-      // dept_date: "2021-11-12T05:00:00.000Z";
-      // dept_time: "13:25:25";
-      // flight_num: "102";
-      // flight_status: "On-time";
       let results = [];
       for (let i = 0; i < flights.length; i++) {
         let temp = [];
