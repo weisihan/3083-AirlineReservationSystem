@@ -210,6 +210,7 @@ app.post("/clientlogin", (req, res) => {
           birth,
         } = result[0];
 
+
         const c_info = {
           c_name,
           email,
@@ -234,46 +235,6 @@ app.post("/clientlogin", (req, res) => {
         }
       }
       return;
-
-      if (err) {
-        console.log(err);
-        res.status(500).send(err);
-      } else if (result.length === 0) {
-        res.status(400).send("This email is not registered!");
-      } else {
-        if (result[0].c_password === hashedPassword) {
-          // const {
-          //   c_name,
-          //   building_num,
-          //   street,
-          //   city,
-          //   state,
-          //   phone_num,
-          //   passport_num,
-          //   passport_exp,
-          //   passport_country,
-          //   birth,
-          // } = result[0];
-          // const c_info = {
-          //   c_name,
-          //   email,
-          //   building_num,
-          //   street,
-          //   city,
-          //   state,
-          //   phone_num,
-          //   passport_num,
-          //   passport_exp,
-          //   passport_country,
-          //   birth,
-          // };
-          console.log("Login successful");
-          res.send(true);
-          //res.send(c_info);
-        } else {
-          // send back a message saying the password is incorrect
-          res.status(400).send("Incorrect password");
-        }
       }
     }
   );

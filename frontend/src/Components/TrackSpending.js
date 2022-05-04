@@ -44,6 +44,7 @@ function TrackSpending() {
     //   }
     // ];
   }
+
   // track();
   return (
     <div className="card">
