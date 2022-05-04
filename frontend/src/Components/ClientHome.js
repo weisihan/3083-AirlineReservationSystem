@@ -13,6 +13,14 @@ import { useNavigate } from "react-router-dom";
 // }
 
 function ClientHome() {
+  let navigate = useNavigate();
+
+  if (localStorage.getItem("loggedIn") === "false") {
+    console.log("not logged in!");
+    alert("you are not logged in");
+    navigate("/login");
+  }
+
   return (
     <div className="card">
       <h1>Client Homepage </h1>
