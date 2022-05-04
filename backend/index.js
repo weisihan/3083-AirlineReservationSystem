@@ -59,8 +59,9 @@ app.get("/home", (req, res) => {
 });
 
 app.post("/stafflogin", (req, res) => {
-  const { username, password } = req.body;
-  const hashedPassword = md5(password); // hash the password
+  const { username, staff_password } = req.body;
+
+  const hashedPassword = md5(staff_password); // hash the password
   connection.query(
     `SELECT * FROM AirlineStaff WHERE username = '${username}'`,
     (err, result) => {

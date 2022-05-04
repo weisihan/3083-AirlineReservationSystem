@@ -8,10 +8,8 @@ function StaffLog(props) {
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({
-    fname: "",
-    lname: "",
     username: "",
-    password: "",
+    staff_password: "",
   });
 
   async function LoggedIn() {
@@ -40,30 +38,6 @@ function StaffLog(props) {
     <div className="card">
       <div className="actions">
         <h2>Logging in as a staff</h2>
-        <div className="form-inner">
-          <div className="form-group">
-            <label htmlFor="fname"> First Name: </label>
-            <input
-              type="text"
-              name="fname"
-              id="fname"
-              onChange={(e) =>
-                setDetails({ ...details, fname: e.target.value })
-              }
-              value={details.fname}
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="lname"> Last Name: </label>
-          <input
-            type="text"
-            name="lname"
-            id="lname"
-            onChange={(e) => setDetails({ ...details, lname: e.target.value })}
-            value={details.lname}
-          />
-        </div>
         <div className="form-group">
           <label htmlFor="username"> Username: </label>
           <input
@@ -77,15 +51,15 @@ function StaffLog(props) {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password"> Password: </label>
+          <label htmlFor="staff_password"> Password: </label>
           <input
             type="text"
-            name="password"
-            id="password"
+            name="staff_password"
+            id="staff_password"
             onChange={(e) =>
-              setDetails({ ...details, password: e.target.value })
+              setDetails({ ...details, staff_password: e.target.value })
             }
-            value={details.password}
+            value={details.staff_password}
           />
         </div>
         <br></br>
