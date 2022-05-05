@@ -3,16 +3,26 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Table from "./Table.component";
 import { UserContext } from "../contexts/user.context";
+import { AccordionDetails } from "@mui/material";
 
 function ViewFlights() {
   const [flightData, setFlightData] = useState([]);
   const { airlineName } = useContext(UserContext);
+
+  const [details, setDetails] = useState({
+    company: "",
+  });
+
+  details.company = airlineName;
+
   useEffect(() => {
     async function fetchData() {
+      console.log("here: ", airlineName);
+      let flights = await axios.post(
+        "http://localhost:3001/viewflight",
+        details
+      );
       console.log(airlineName);
-      let flights = await axios.post("http://localhost:3001/viewflight", {
-        airlineName,
-      });
       flights = flights.data;
       console.log(flights);
       let results = [];
