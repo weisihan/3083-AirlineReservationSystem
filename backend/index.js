@@ -286,11 +286,23 @@ app.post("/clientPurchaseTicket", (req, res) => {
     }
   );
 });
+app.post("/ticketInfo", (req, res) => {
+  console.log("ticketInfo", req.body.email);
+  const email = req.body.email;
+  connection.query(
+    `SELECT * FROM Purchase WHERE email='${email}'`,
+    (err, result) => {
+      res.send(result);
+    }
+  );
+});
 app.post("/clientcancel", (req, res) => {
   console.log("cancel", req.body);
   // res.send(true);
   //purchase, ticket,
-  const { flightNum, airlineName, depTime, depDate, email } = req.body;
+
+  const { ticketId, flightNum, airlineName, depTime, depDate, email } =
+    req.body;
   // let airlineName = req.body.airlineName;
   // let flightNum = req.body.flightNum;
   // let depDate = req.body.depDate;
@@ -299,17 +311,18 @@ app.post("/clientcancel", (req, res) => {
   console.log("num", flightNum);
   let dept_date = depDate.split("T")[0];
   connection.query(
-    `DELETE FROM Ticket WHERE airline_name = '${airlineName}' AND flight_num = '${flightNum}' AND dept_date = '${depDate}' AND dept_time = '${depTime}'`,
-    // [airlineName, flightNum, dept_date, depTime],
+    `
+         DELETE FROM Purchase
+          WHERE Purchase.ticket_id = ?
+          `,
+    [ticketId],
+
     (err, rows) => {
       if (!err) {
         // use the ticket id in the row to delete the purchase table
+        console.log("should work");
         connection.query(
-          `
-          DELETE FROM Purchase
-          WHERE Purchase.ticket_id = ?
-          `,
-          [rows[0].ID],
+          ` DELETE FROM Ticket WHERE airline_name = '${airlineName}' AND flight_num = '${flightNum}' AND dept_date = '${depDate}' AND dept_time = '${depTime}'`,
 
           (err, rows) => {
             if (!err) {
