@@ -61,6 +61,7 @@ function TrackSpending() {
     }
 
     console.log(monthA);
+    console.log(res);
     for (let j = 0; j < monthA.length; j++) {
       let monthSpend = 0;
       for (let i = 0; i < res.length; i++) {
