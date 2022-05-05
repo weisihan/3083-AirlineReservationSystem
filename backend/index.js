@@ -61,12 +61,12 @@ app.get("/home", (req, res) => {
 app.post("/viewflight", (req, res) => {
   let departDate = new Date();
   let future30 = new Date();
+  let airline_name = req.body.company;
   departDate = moment(departDate).format("YYYY-MM-DD");
   future30 = moment(departDate).format("YYYY-MM-DD");
   future30 = moment(future30).add(30, "days");
   console.log(future30);
   // select all the flight data
-  const airline_name = req.body.airline_name;
   // future 30 days
 
   connection.query(
