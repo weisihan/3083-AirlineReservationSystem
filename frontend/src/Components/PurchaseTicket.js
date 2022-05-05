@@ -31,8 +31,8 @@ function PurchaseTicket(props) {
 
   return (
     <div className="card">
-      {<p>{JSON.stringify(purchaseInfo)}</p>}
-      {<p>{JSON.stringify(purchaseForm)}</p>}
+      {/* {<p>{JSON.stringify(purchaseInfo)}</p>}
+      {<p>{JSON.stringify(purchaseForm)}</p>} */}
       <h1>Purchase ticket </h1>
       <div className="form-group">
         <label> First Name </label>
