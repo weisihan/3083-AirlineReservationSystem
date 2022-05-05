@@ -49,6 +49,31 @@ app.get("/home", (req, res) => {
   });
 });
 
+app.post("/money", (req, res) => {
+  connection.query(
+    `SELECT *
+    FROM Ticket
+    WHERE ID IN (
+      SELECT Ticket.ID
+      FROM Ticket
+      WHERE Ticket.ID IN (
+        SELECT Purchase.ticket_id
+        FROM Purchase
+        WHERE Purchase.email = ? 
+      )
+    )
+    AND purchase_date BETWEEN ? AND ?`,
+    [req.body.email, req.body.start_date, req.body.end_date],
+    (err, rows) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+});
+
 app.post("/stafflogin", (req, res) => {
   const { username, password } = req.body;
   const hashedPassword = md5(password); // hash the password
