@@ -66,9 +66,9 @@ app.post("/viewflight", (req, res) => {
   future30 = moment(future30).add(30, "days");
   console.log(future30);
   // select all the flight data
-  console.log(req.body);
   const airline_name = req.body.airline_name;
   // future 30 days
+
   connection.query(
     `SELECT * FROM Flight WHERE airline_name = '${airline_name}'`,
     (err, rows) => {
