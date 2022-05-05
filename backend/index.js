@@ -916,6 +916,7 @@ app.post("/newflight", (req, res) => {
                       (err, rows) => {
                         if (!err) {
                           res.send("Added new flight");
+                          console.log(rows);
                         } else {
                           res.send(
                             "Unable to add the flight, check all your fields and try again"

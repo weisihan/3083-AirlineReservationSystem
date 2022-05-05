@@ -33,11 +33,12 @@ function PurchaseTicket(props) {
     const name = event.target.name;
     const value = event.target.value;
     setPurchaseInfo({ ...purchaseForm, [name]: value });
-    alert("Purchase Successful!");
   };
 
   function purchaseReq(purchaseInfo) {
     // console.log(purchaseInfo);
+    alert("Purchase Successful!");
+
     axios.post("http://localhost:3001/clientPurchaseTicket", purchaseInfo);
   }
 
