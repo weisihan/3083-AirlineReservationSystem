@@ -1,12 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Home from "../Router/Home/Home";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { UserContext } from "../contexts/user.context";
 
 function ClientLog(props) {
-  const { setCurrentUser, currentUser } = useContext(UserContext);
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({
@@ -27,12 +25,10 @@ function ClientLog(props) {
     console.log(res);
     const setLocalStorage = res ? true : false;
     localStorage.setItem("loggedIn", setLocalStorage);
+    // localStorage.getItem("rememberMe");
 
     if (res) {
       console.log("you are logged in");
-      console.log("a");
-      setCurrentUser(details.email);
-      console.log("b");
       navigate("/clienthome");
     } else {
       alert("wrong username or password");
