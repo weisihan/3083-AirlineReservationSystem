@@ -1,15 +1,15 @@
 # 3083-AirlineReservationSystem
 
 
-Public home page
-View all flights in future 30 days
+##Public home page
+###View all flights in future 30 days
 Frontend: on our home page, we utilized the table class we defined to format the data sent from the backend to be displayed to the user. When the home page is loaded, data will be requested from the backend. 
 Backend: the backend uses a query to filter flights only in the future 30 days to be displayed. 
-Search for flights
+###Search for flights
 Frontend: Both on the home page and client home page, there is a form that asks the user to fill out source city, destination city, departure date, arrival information. After they click the search flight button, their flight information will be displayed.
 Backend: Use sql query to filter out Flight table’s information that matches the form information user put in in the form from front end.
-Login page
-Client login
+##Login page
+###Client login
 Frontend: clients will need to enter their email and password in order to login. If not all the fields are filled, an alert will be shown. The user-entered data will be sent to the backend to be verified. If their username or password is invalid, an alert will be shown. They will be automatically directed to the client homepage once they successfully logged in. An authentication is also updated so the users’ status can be changed to logged in and will stay as logged in. 
 Backend: the user-entered data will be send to the backend, where the data will be verified. The user-entered password will first be hashed with md5 since the password stored in our database is also hashed with md5. The user’s email will then be found in our database with a query so we can locate this user and fetch their stored password. The backend will either return true for the user to successfully login or send a message notifying the user about invalid username or password. 
 Staff login
