@@ -18,7 +18,12 @@ function ClientHome() {
   if (localStorage.getItem("loggedIn") === "false") {
     console.log("not logged in!");
     alert("you are not logged in");
-    navigate("/login");
+    navigate("/home");
+    return (
+      <Link to="/home">
+        <button className="btn">Return to home</button>
+      </Link>
+    );
   }
 
   return (
@@ -27,18 +32,23 @@ function ClientHome() {
       <h2>Welcome to client homepage</h2>
       <div className="actions">
         <Link to="/myflights">
-          <button className="btn">View my flights/Reivew Flights</button>
+          <button className="btn">View my flights</button>
         </Link>
         <br></br>
         <br></br>
         <Link to="/searchflights">
-          <button className="btn">Search for flights/Purchase Flights</button>
+          <button className="btn">
+            Search for flights/Purchase Flights/Reivew Flights
+          </button>
         </Link>
         <br></br>
         <br></br>
-        <Link to="/cancel">
-          <button className="btn">Cancel Flight</button>
-        </Link>
+        {/* <Link to="/purchaseticket">
+          <button className="btn">Purchase ticket</button>
+        </Link> */}
+        {/* <Link to="/review">
+          <button className="btn">Review</button>
+        </Link> */}
         <Link to="/trackspending">
           <button className="btn">Track spending</button>
         </Link>
