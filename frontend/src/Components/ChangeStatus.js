@@ -15,6 +15,7 @@ function ChangeStatus() {
         <button className="btn">Go back to Home</button>
       </Link>
     );
+  }
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({
@@ -49,7 +50,9 @@ function ChangeStatus() {
             type="text"
             name="flight_num"
             id="flight_num"
-            onChange={(e) => setDetails({ ...details, flight_num: e.target.value })}
+            onChange={(e) =>
+              setDetails({ ...details, flight_num: e.target.value })
+            }
             value={details.flight_num}
           />
         </div>
@@ -73,7 +76,9 @@ function ChangeStatus() {
             type="text"
             name="dept_date"
             id="dept_date"
-            onChange={(e) => setDetails({ ...details, dept_date: e.target.value })}
+            onChange={(e) =>
+              setDetails({ ...details, dept_date: e.target.value })
+            }
             value={details.dept_date}
           />
         </div>
