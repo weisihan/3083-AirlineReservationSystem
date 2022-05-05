@@ -6,8 +6,8 @@ import { UserContext } from "../contexts/user.context";
 
 function ShowRevenueBusiness() {
   const [revenueB, showRevenueB] = useState([]);
-  const { metaData } = useContext(UserContext);
-  const { airline_name } = metaData;
+  const { airlineName } = useContext(UserContext);
+  const { airline_name } = airlineName;
   useEffect(() => {
     async function fetchData() {
       //console.log(airline_name);
