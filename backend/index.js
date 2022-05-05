@@ -27,7 +27,7 @@ app.use(cors());
 
 app.post("/", (req, res) => {
   console.log(req.body);
-  if (req.body["username"] == "justin") {
+  if (req.body["username"] == "olivia") {
     console.log("YOOO");
   }
   // sql query using the req.username
@@ -36,11 +36,21 @@ app.post("/", (req, res) => {
 
 app.get("/home", (req, res) => {
   // select all the flight data
-  // future 30 days!!!
+  let departDate = new Date();
+  let future30 = new Date();
+  departDate = moment(departDate).format("YYYY-MM-DD");
+  future30 = moment(departDate).format("YYYY-MM-DD");
+  future30 = moment(future30).add(30, "days");
+  console.log(future30);
+
   connection.query("SELECT * FROM Flight", (err, rows) => {
     if (!err) {
-      res.send(rows);
-      console.log(rows);
+      let filteredRows = rows.filter(
+        (row) => future30.diff(moment(row["dept_date"]), "days") < 30
+      );
+      console.log(filteredRows[0]);
+
+      res.send(filteredRows);
     } else {
       res.status(500).send(err);
       console.log(err);
@@ -325,80 +335,126 @@ app.post("/stafflogin", (req, res) => {
         currUser = req.body.username;
         currRole = "staff";
         return;
+app.post("/money", (req, res) => {
+  connection.query(
+    `SELECT *
+    FROM Ticket
+    WHERE ID IN (
+      SELECT Ticket.ID
+      FROM Ticket
+      WHERE Ticket.ID IN (
+        SELECT Purchase.ticket_id
+        FROM Purchase
+        WHERE Purchase.email = ? 
+      )
+    )
+    AND purchase_date BETWEEN ? AND ?`,
+    [req.body.email, req.body.start_date, req.body.end_date],
+    (err, rows) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
       }
     }
-  }
-  console.log("Invalid username or password");
-  res.send(false);
+  );
 });
+
+app.post("/stafflogin", (req, res) => {
+  const { username, staff_password } = req.body;
+
+  const hashedPassword = md5(staff_password); // hash the password
+  connection.query(
+    `SELECT * FROM AirlineStaff WHERE username = '${username}'`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        if (result.length === 0) {
+          res.status(400).send("Invalid username or password");
+        }
+        if (result[0].staff_password === hashedPassword) {
+          // send back the user information without the password
+          console.log("login success");
+          res.send(true);
+        } else {
+          res.status(400).send("Incorrect password");
+        }
+      }
+      return;
+    }
+  );
+});
+
 app.post("/displayFlight", (req, res) => {
   let data = db.getData("/");
   res.send(data.flight);
 });
-app.post("/cancelFlight", (req, res) => {
-  console.log("back");
-  let data = db.getData("/");
-  let now = new Date().toLocaleDateString();
-  let flag = 0;
-  console.log("now", now);
-  for (let i = 0; i < data.flight.length; i++) {
-    if (data.flight[i].flightnum == req.body.cancel) {
-      console.log("firststep");
-      let dateNum = data.flight[i].departureDate.split("-");
-      console.log("time", dateNum);
-      let nowNum = now.split("/");
-      console.log("now", nowNum);
-      if (nowNum[2] == dateNum[0]) {
-        console.log(nowNum[2]);
-        console.log(dateNum[0]);
-        if (nowNum[0] == dateNum[1]) {
-          if (nowNum[1] - dateNum[2] <= 1 || dateNum[2] - nowNum[1] <= 1) {
-            flag = 1;
-          }
-        }
-      }
-      // if(data.flight[i].departureDate)
-      if (flag != 1) {
-        console.log("work");
-        for (
-          let tmpItem = 0;
-          tmpItem < data.flight[i].passenger.length;
-          tmpItem++
-        ) {
-          // console.log("tmpEmail",data.data.client[j].email);
-          if (data.flight[i].passenger[tmpItem] == req.body.email) {
-            console.log("delete flgiht", data.flight[i]);
-            // db.delete("/flight", data.flight[i].passenger[tmpItem]);
-            // db.delete("/review", [req.body]);
-            res.send("success");
-            console.log("cancel done");
-          }
-        }
-      }
-    }
-  }
-  res.send("fail");
-  console.log("cancelflight", req.body);
-  // for (const item in data.ticket) {
-  //   console.log("dataemail",data.ticket[item].userEmail);
-  //   console.log("reqemail",req.body.email);
-  //   if(data.ticket[item].userEmail == req.body.email){
-  //     console.log(2);
-  //     if(data.ticket[item].flightNum == req.body.cancel){
-  //       console.log(3);
-  //       db.delete("/review", [req.body]);
-  //       res.send("success");
-  //       console.log("review done");
-  //     }
-  //   }
-  // }
-  // console.log("cancel fail");
-  // res.send("fail");
-  // console.log("cancelflight",req.body);
-});
+// app.post("/cancelFlight", (req, res) => {
+//   console.log("back");
+//   let data = db.getData("/");
+//   let now = new Date().toLocaleDateString();
+//   let flag = 0;
+//   console.log("now", now);
+//   for (let i = 0; i < data.flight.length; i++) {
+//     if (data.flight[i].flightnum == req.body.cancel) {
+//       console.log("firststep");
+//       let dateNum = data.flight[i].departureDate.split("-");
+//       console.log("time", dateNum);
+//       let nowNum = now.split("/");
+//       console.log("now", nowNum);
+//       if (nowNum[2] == dateNum[0]) {
+//         console.log(nowNum[2]);
+//         console.log(dateNum[0]);
+//         if (nowNum[0] == dateNum[1]) {
+//           if (nowNum[1] - dateNum[2] <= 1 || dateNum[2] - nowNum[1] <= 1) {
+//             flag = 1;
+//           }
+//         }
+//       }
+//       // if(data.flight[i].departureDate)
+//       if (flag != 1) {
+//         console.log("work");
+//         for (
+//           let tmpItem = 0;
+//           tmpItem < data.flight[i].passenger.length;
+//           tmpItem++
+//         ) {
+//           // console.log("tmpEmail",data.data.client[j].email);
+//           if (data.flight[i].passenger[tmpItem] == req.body.email) {
+//             console.log("delete flgiht", data.flight[i]);
+//             // db.delete("/flight", data.flight[i].passenger[tmpItem]);
+//             // db.delete("/review", [req.body]);
+//             res.send("success");
+//             console.log("cancel done");
+//           }
+//         }
+//       }
+//     }
+//   }
+//   res.send("fail");
+//   console.log("cancelflight", req.body);
+//   // for (const item in data.ticket) {
+//   //   console.log("dataemail",data.ticket[item].userEmail);
+//   //   console.log("reqemail",req.body.email);
+//   //   if(data.ticket[item].userEmail == req.body.email){
+//   //     console.log(2);
+//   //     if(data.ticket[item].flightNum == req.body.cancel){
+//   //       console.log(3);
+//   //       db.delete("/review", [req.body]);
+//   //       res.send("success");
+//   //       console.log("review done");
+//   //     }
+//   //   }
+//   // }
+//   // console.log("cancel fail");
+//   // res.send("fail");
+//   // console.log("cancelflight",req.body);
+// });
 app.post("/clientFlightBack", (req, res) => {
   console.log("finally worked");
-  res.send(currUser);
+  res.send("hi");
   // var data = db.getData("/");
   // for (const item in data.client) {
   //   if (data.client[item].email === req.body.email) {
@@ -424,72 +480,30 @@ app.post("/clientSearchFlight", (req, res) => {
       res.send(result);
     }
   );
-  // connection.query(
-  //   `SELECT * FROM airline_reservation.Flight WHERE dept_airport='${sourceCity}' AND arr_airport ='${destination}' dept_date.split("T")[0] = '${departureDate}' AND dept_date.split("T")[0] = '${departureDate}' AND ;`,
-  //   (err, result) => {
-  //     if (err) {
-  //       console.log(err);
-  //       res.status(500).send(err);
-  //     } else {
-  //       console.log("flights", result);
-  //       res.send(result);
-  //     }
-  //   }
-  // );
-
-  // const {
-  //   c_name,
-  //   cust_password,
-  //   building_num,
-  //   street,
-  //   city,
-  //   state,
-  //   phone_num,
-  //   passport_num,
-  //   passport_exp,
-  //   passport_country,
-  //   birth,
-  // }
-  //= result[0];
-  //set up sql
-
-  // for (const item in data.flight) {
-  //   if (data.flight[item].departairport === req.body.sourcecity) {
-  //     console.log("1connected");
-  //     if (data.flight[item].arriveairport === req.body.descity) {
-  //       console.log("descity match");
-  //       if (data.flight[item].departureDate === req.body.depdate) {
-  //         console.log("depdate match");
-  //         if (data.flight[item].arrivalDate === req.body.arrivedate) {
-  //           console.log("connected");
-  //           console.log(data.flight[item].arriveairport);
-  //           dataArray.push(data.flight[item]);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // res.send(dataArray);
 });
 app.post("/clientReviewBack", (req, res) => {
-  let data = db.getData("/");
-  console.log("reviewbody", req.body);
-  for (const item in data.ticket) {
-    // console.log("dataemail",data.ticket[item].userEmail);
-    // console.log("reqemail",req.body.);
-    if (data.ticket[item].userEmail == req.body.userEmail) {
-      console.log(2);
-      if (data.ticket[item].flightNum == req.body.flightNum) {
-        console.log(3);
-        db.push("/review", [req.body]);
-        res.send("newreview");
-        console.log("review done");
-      } else {
-        console.log("review fail");
-        res.send("fail");
+  // console.log("Review", req.body);
+  let flightNum = req.body.flightNum;
+  let rating = req.body.rating;
+  let comment = req.body.comment;
+  let airlineName = req.body.airlineName;
+  let depDate = req.body.depDate;
+  let depTime = req.body.depTime;
+  let currUser = req.body.currentUser;
+  connection.query(
+    `INSERT INTO Feedback (email, flight_num, airline_name, dept_date, dept_time, comment, rating)
+    VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [currUser, flightNum, airlineName, depDate, depTime, comment, rating],
+    (err, rows) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error inserting");
+        return;
       }
+      res.status(200).send(true);
     }
-  }
+  );
+  //find flight num
 });
 //this is for client purchase ticket
 app.post("/clientPurchaseTicket", (req, res) => {
@@ -571,20 +585,65 @@ app.post("/clientPurchaseTicket", (req, res) => {
           }
         );
       }
-      // if (!err) {
-
-      // } else {
-      //   res.send(err);
-      //   console.log(err);
-      // }
     }
   );
-  // db.push("/ticket", [req.body]);
-  // res.send("newclient");
-  // console.log("ticket purchase");
-  //res.send(currUser);
 });
+app.post("/ticketInfo", (req, res) => {
+  console.log("ticketInfo", req.body.email);
+  const email = req.body.email;
+  connection.query(
+    `SELECT * FROM Purchase WHERE email='${email}'`,
+    (err, result) => {
+      res.send(result);
+    }
+  );
+});
+app.post("/clientcancel", (req, res) => {
+  console.log("cancel", req.body);
+  // res.send(true);
+  //purchase, ticket,
 
+  const { ticketId, flightNum, airlineName, depTime, depDate, email } =
+    req.body;
+  // let airlineName = req.body.airlineName;
+  // let flightNum = req.body.flightNum;
+  // let depDate = req.body.depDate;
+  // let depTime = req.body.depTime;
+  // let email = req.body.email;
+  console.log("num", flightNum);
+  let dept_date = depDate.split("T")[0];
+  connection.query(
+    `
+         DELETE FROM Purchase
+          WHERE Purchase.ticket_id = ?
+          `,
+    [ticketId],
+
+    (err, rows) => {
+      if (!err) {
+        // use the ticket id in the row to delete the purchase table
+        console.log("should work");
+        connection.query(
+          ` DELETE FROM Ticket WHERE airline_name = '${airlineName}' AND flight_num = '${flightNum}' AND dept_date = '${depDate}' AND dept_time = '${depTime}'`,
+
+          (err, rows) => {
+            if (!err) {
+              res.send({
+                success: true,
+              });
+            } else {
+              res.send(err);
+              console.log("hi", err);
+            }
+          }
+        );
+      } else {
+        res.send(err);
+        console.log("error", err);
+      }
+    }
+  );
+});
 app.post("/clientlogin", (req, res) => {
   const { email, password } = req.body;
   const hashedPassword = md5(password); // hash the password
@@ -647,21 +706,105 @@ app.post("/clientlogin", (req, res) => {
     return;
   }
 });
+app.post("/clientView", (req, res) => {
+  // console.log("clientView", req.body);
+  if (req.body.airline_name) {
+    connection.query(
+      `SELECT *
+        FROM Flight
+        WHERE airline_name = ?
+        AND flight_num IN
+        (
+            SELECT Ticket.flight_num
+            FROM Ticket
+            WHERE Ticket.ID IN
+            (
+                SELECT Purchase.ticket_id
+                FROM Purchase
+                WHERE Purchase.email = ?
+            )
+        )`,
+      [req.body.airline_name, req.body.email],
+      (err, rows) => {
+        if (!err) {
+          res.send({
+            flights: rows,
+            cust_email: req.body.email,
+          });
+        } else {
+          res.send(err);
+          console.log(err);
+        }
+      }
+    );
+  } else {
+    connection.query(
+      `SELECT *
+        FROM Flight
+        WHERE flight_num IN
+        (
+            SELECT Ticket.flight_num
+            FROM Ticket
+            WHERE Ticket.ID IN
+            (
+                SELECT Purchase.ticket_id
+                FROM Purchase
+                WHERE Purchase.email = ?
+            )
+        )`,
 
-app.post("/newstaff", (req, res) => {
-  console.log(req.body);
-  db.push("/staff", [req.body], false);
-  res.send("newstaff");
-});
-app.post("/money", (req, res) => {
-  let moneyArray = [];
-  var data = db.getData("/");
-  for (const item in data.ticket) {
-    if (data.ticket[item].userEmail == req.body.email) {
-      moneyArray.push(data.ticket[item].price);
-    }
+      [req.body.email],
+      (err, rows) => {
+        if (!err) {
+          res.send({
+            flights: rows,
+            cust_email: req.body.email,
+          });
+        } else {
+          res.send(err);
+          console.log(err);
+        }
+      }
+    );
   }
-  res.send(moneyArray);
+});
+app.post("/newstaff", (req, res) => {
+  const { username, password, first_name, last_name, birth, airline_name } =
+    req.body;
+  const birth_mysql = `${birth.slice(0, 4)}/${birth.slice(5, 7)}/${birth.slice(
+    8,
+    10
+  )}`;
+
+  const hashedPassword = md5(password);
+  connection.query(
+    `SELECT * FROM AirlineStaff WHERE username = '${username}'`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else if (result.length > 0) {
+        res.status(400).send("User already exists");
+      } else {
+        const query = `INSERT INTO AirlineStaff(username,staff_password,first_name,last_name,DOB,airline_name) VALUES (
+                    '${username}',
+                    '${hashedPassword}',
+                    '${first_name}',
+                    '${last_name}',
+                    '${birth_mysql}',
+                    '${airline_name}'
+                )`;
+        connection.query(query, (err, result) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send(err);
+          } else {
+            res.status(200).send(result);
+          }
+        });
+      }
+    }
+  );
 });
 
 app.post("/newclient", (req, res) => {
@@ -726,21 +869,6 @@ app.post("/newclient", (req, res) => {
 });
 
 app.post("/newflight", (req, res) => {
-  // parse the dept_date to sql date format
-  // let dept_date = req.body.payload.dept_date.split("T")[0];
-  // let dept_time = req.body.payload.dept_time.split("T")[1];
-  // // parse the arr date to sql date format
-  // let arr_date = req.body.payload.arr_date.split("T")[0];
-  // let arr_time = req.body.payload.arr_time.split("T")[1];
-  // // change dept time and arr time to eastern standard time
-  // let dept_time_eastern = moment(dept_time, "HH:mm:ss")
-  //   .add(-5, "hours")
-  //   .format("HH:mm:ss");
-  // let arr_time_eastern = moment(arr_time, "HH:mm:ss")
-  //   .add(-5, "hours")
-  //   .format("HH:mm:ss");
-
-  // check if the airports exist
   connection.query(
     `SELECT *
     FROM Airport
@@ -785,10 +913,10 @@ app.post("/newflight", (req, res) => {
                         req.body.airline_name,
                         req.body.dept_airport,
                         req.body.arr_airport,
-                        dept_date,
-                        dept_time_eastern,
-                        arr_date,
-                        arr_time_eastern,
+                        req.body.dept_date,
+                        req.body.dept_time_eastern,
+                        req.body.arr_date,
+                        req.body.arr_time_eastern,
                         req.body.airplane_id,
                         req.body.flight_status,
                         req.body.base_price,

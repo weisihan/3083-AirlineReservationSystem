@@ -1,12 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Home from "../Router/Home/Home";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { UserContext } from "../contexts/user.context";
 
 function ClientLog(props) {
-  const { setCurrentUser, currentUser } = useContext(UserContext);
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({
@@ -22,30 +20,15 @@ function ClientLog(props) {
       }
     }
 
-    // let general = await axios.all([
-    //   await axios.post("http://localhost:3001/clientlogin", details),
-    //   await axios.post("http://localhost:3001/clientFlightBack", details),
-    // ]);
-    // console.log("general", general);
-    // const resBody = general[0];
-
-    // const forFlight = await axios.post(
-    //   "http://localhost:3001/clientFlightBack",
-    //   details
-    // );
-    // );
-
     let res = await axios.post("http://localhost:3001/clientlogin", details);
     res = res.data;
     console.log(res);
     const setLocalStorage = res ? true : false;
     localStorage.setItem("loggedIn", setLocalStorage);
+    // localStorage.getItem("rememberMe");
 
     if (res) {
       console.log("you are logged in");
-      console.log("a");
-      setCurrentUser(details.email);
-      console.log("b");
       navigate("/clienthome");
     } else {
       alert("wrong username or password");

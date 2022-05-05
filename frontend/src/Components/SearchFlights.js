@@ -12,10 +12,10 @@ function SearchFlights() {
 
   const [formDetails, setDetails] = useState({
     //REMBER TO CHANGE THIS!!!!!!!!!
-    sourceCity: "LAX",
-    destination: "PEK",
-    departureDate: "2021-03-04",
-    arrivalDate: "2021-03-05",
+    sourceCity: "",
+    destination: "",
+    departureDate: "",
+    arrivalDate: "",
   });
 
   const [foundFlights, setFlights] = useState([]);

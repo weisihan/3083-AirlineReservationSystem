@@ -2,34 +2,60 @@ import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../contexts/user.context";
+import Table from "./Table.component";
 
-function Review() {
+function Cancel() {
   const { currentUser } = useContext(UserContext);
-  console.log(currentUser);
   const [formDetails, setDetails] = useState({
+    ticketId: "",
     airlineName: "",
     flightNum: "",
-    rating: "",
-    comment: "",
     depDate: "",
     depTime: "",
-    currentUser,
+    email: currentUser,
   });
 
   async function sendRequest(formDetails) {
     let res = await axios.post(
-      "http://localhost:3001/clientReviewBack",
+      "http://localhost:3001/clientcancel",
       formDetails
     );
   }
+  async function getId(formDetails) {
+    let res = await axios.post("http://localhost:3001/ticketInfo", formDetails);
+    // console.log("ticket", res);
+    res = res.data;
+    console.log("ticketdata", res);
+    let aggregated = [];
+    for (let i = 0; i < res.length; i++) {
+      //   console.log(res[i].ticketId);
+      console.log(res[i].ticket_id);
+      aggregated.push([res[i].email, res[i].ticket_id]);
+    }
+    console.log("agg", aggregated);
+    //here
+    setFlights(aggregated);
+  }
   function handleEvent(event) {
     console.log("targetname", event.target.name);
-    setDetails({ ...formDetails, [event.target.name]: event.target.value }); //happening in the background
+    setDetails({ ...formDetails, [event.target.name]: event.target.value });
     console.log(formDetails);
   }
+  const [foundFlights, setFlights] = useState([]);
+  let heading = ["Your Email", "Your Ticket Ids"];
+
   return (
     <div className="card">
-      <h1>Review </h1>
+      <h1>Cancel Flight </h1>
+      <button className="btn" onClick={() => getId(formDetails)}>
+        {" "}
+        Display Your Ticket IDs{" "}
+      </button>
+      <Table heading={heading} body={foundFlights} />
+      <div className="form-group">
+        <label> Ticket Id </label>
+        <input type="text" name="ticketId" onChange={(e) => handleEvent(e)} />
+      </div>
       <div className="form-group">
         <label> Airline Name </label>
         <input
@@ -38,6 +64,7 @@ function Review() {
           onChange={(e) => handleEvent(e)}
         />
       </div>
+
       <div className="form-group">
         <label> Departure Date </label>
         <input type="text" name="depDate" onChange={(e) => handleEvent(e)} />
@@ -47,21 +74,15 @@ function Review() {
         <label> Departure Time </label>
         <input type="text" name="depTime" onChange={(e) => handleEvent(e)} />
       </div>
+
       <div className="form-group">
         <label> Flight Number </label>
         <input type="text" name="flightNum" onChange={(e) => handleEvent(e)} />
       </div>
-      <div className="form-group">
-        <label> Rating </label>
-        <input type="text" name="rating" onChange={(e) => handleEvent(e)} />
-      </div>
-      <div className="form-group">
-        <label> Comment </label>
-        <input type="text" name="comment" onChange={(e) => handleEvent(e)} />
-      </div>
+
       <button className="btn" onClick={() => sendRequest(formDetails)}>
         {" "}
-        Submit Review{" "}
+        Confirm Cancel{" "}
       </button>
       <div className="actions">
         <Link to="/clienthome">
@@ -72,4 +93,4 @@ function Review() {
   );
 }
 
-export default Review;
+export default Cancel;
