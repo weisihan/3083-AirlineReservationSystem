@@ -56,9 +56,39 @@ function StaffHome() {
         </Link>
         <br></br>
         <br></br>
+        <Link to="/mostfrequent">
+          <button className="btn">View Most Frequent Customer</button>
+        </Link>
+        <br></br>
+        <br></br>
+        <Link to="/toparrivals">
+          <button className="btn">View Top Destinations</button>
+        </Link>
+        <br></br>
+        <br></br>
         <Link to="/viewreport">
           <button className="btn">View report</button>
         </Link>
+        <br></br>
+        <br></br>
+        <Link to="/showrevenue">
+          <button className="btn">Show Revene of Last Year</button>
+        </Link>
+        <Link to="/showrevenuemonth">
+          <button className="btn">Show Revene of Last Month</button>
+        </Link>
+        <br></br>
+        <br></br>
+        <Link to="/showrevenueeconomy">
+          <button className="btn">Show Total Revene of Economy Class</button>
+        </Link>
+        <br></br>
+        <br></br>
+        <Link to="/showrevenuebusiness">
+          <button className="btn">Show Total Revene of Business Class</button>
+        </Link>
+        <br></br>
+        <br></br>
         <Link to="/logout">
           <button className="btn--alt">Logout </button>
         </Link>
