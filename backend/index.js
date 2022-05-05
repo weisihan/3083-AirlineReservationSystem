@@ -179,6 +179,20 @@ app.post("/mostfrequent", (req, res) => {
           [customoer_email],
           (err, rows) => {
             if (!err) {
+              connection.query(
+                // get all flights of the customer by email
+                "SELECT flight_id FROM Purchase WHERE email = customoer_email",
+                [all_flights],
+                (err, all_flights) => {
+                  if (!err) {
+                    // send the customer information and all the flights
+                    res.send(all_flights);
+                  } else {
+                    res.status(500).send(err);
+                    console.log(err);
+                  }
+                }
+              );
               // send the customer information as well as the number of purchases
               res.send({ customer: rows[0] });
             } else {
@@ -320,25 +334,6 @@ app.post("/showrevenuebusiness", (req, res) => {
   );
 });
 
-app.post("/stafflogin", (req, res) => {
-  console.log("post");
-  console.log(req.body.username);
-  console.log(req.body.password);
-
-  // check if username and password are correct
-  var data = db.getData("/");
-  for (const item in data.staff) {
-    if (data.staff[item].username === req.body.username) {
-      if (data.staff[item].password === req.body.password) {
-        console.log("Login successful");
-        res.send(true);
-        currUser = req.body.username;
-        currRole = "staff";
-        return;
-      }
-    }
-  }
-});
 app.post("/money", (req, res) => {
   connection.query(
     `SELECT *
@@ -651,64 +646,53 @@ app.post("/clientcancel", (req, res) => {
 app.post("/clientlogin", (req, res) => {
   const { email, password } = req.body;
   const hashedPassword = md5(password); // hash the password
-  try {
-    connection.query(
-      `SELECT * FROM Customer WHERE email = '${email}'`, // find the client
-      (err, result) => {
-        if (err) {
-          console.log(err);
-          res.status(500).send(err);
-          return;
+  connection.query(
+    `SELECT * FROM Customer WHERE email = '${email}'`, // find the client
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        const {
+          c_name,
+          cust_password,
+          building_num,
+          street,
+          city,
+          state,
+          phone_num,
+          passport_num,
+          passport_exp,
+          passport_country,
+          birth,
+        } = result[0];
+
+        const c_info = {
+          c_name,
+          email,
+          building_num,
+          street,
+          city,
+          state,
+          phone_num,
+          passport_num,
+          passport_exp,
+          passport_country,
+          birth,
+        };
+
+        if (cust_password === hashedPassword) {
+          console.log("login success");
+          res.send(true);
+          // currUser = req.body.email;
+          // currRole = "client";
         } else {
-          if (result.length === 0) {
-            res.status(500).send("No user found");
-            return;
-          }
-
-          const {
-            c_name,
-            cust_password,
-            building_num,
-            street,
-            city,
-            state,
-            phone_num,
-            passport_num,
-            passport_exp,
-            passport_country,
-            birth,
-          } = result[0];
-
-          const c_info = {
-            c_name,
-            email,
-            building_num,
-            street,
-            city,
-            state,
-            phone_num,
-            passport_num,
-            passport_exp,
-            passport_country,
-            birth,
-          };
-
-          if (cust_password === hashedPassword) {
-            console.log("login success");
-            res.send(true);
-            return;
-          } else {
-            res.status(400).send("Incorrect password");
-            return;
-          }
+          res.status(400).send("Incorrect password");
         }
       }
-    );
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("ERROR");
-    return;
-  }
+      return;
+    }
+  );
 });
 app.post("/clientView", (req, res) => {
   // console.log("clientView", req.body);

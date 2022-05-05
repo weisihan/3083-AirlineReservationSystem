@@ -7,6 +7,17 @@ import { useNavigate } from "react-router-dom";
 import { PurchaseContext } from "../contexts/purchase.context";
 function SearchFlights() {
   let navigate = useNavigate();
+  if (localStorage.getItem("loggedIn") === "false") {
+    console.log("not logged in!");
+    alert("you are not logged in");
+    navigate("/home");
+    return (
+      <Link to="/home">
+        <button className="btn">Return to home</button>
+      </Link>
+    );
+  }
+
   const { currentUser } = useContext(UserContext);
   const { setPurchaseInfo } = useContext(PurchaseContext);
 
@@ -30,11 +41,6 @@ function SearchFlights() {
     currentUser,
     base_price
   ) {
-    if (!currentUser) {
-      alert("NO USER IS LOGGED IN!!!");
-      navigate("/login");
-      // return;
-    }
     //flight id is the flight num
     console.log("go purchase ticket...");
     setPurchaseInfo({

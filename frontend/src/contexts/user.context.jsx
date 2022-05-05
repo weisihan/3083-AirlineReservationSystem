@@ -4,10 +4,10 @@ export const UserContext = createContext({
     currentUser: null,
     metaData: {
         // fixed this default company 
-        airline_name: "China Eastern",
+        airline_name: null,
     },
     setMetaData: () => null,
-    setCurrentUser: () => null,
+    setCurrentUser: (userid) => currUser = userid,
 });
 
 export const UserProvider = ({ children }) => {

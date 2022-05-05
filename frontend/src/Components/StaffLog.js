@@ -1,15 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Home from "../Router/Home/Home";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { UserContext } from "../contexts/user.context";
 
 function StaffLog(props) {
-  // get curr logedin staff info (company)
-  const { metaData, setMetaData } = useContext(UserContext);
-  // -------------
-
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({

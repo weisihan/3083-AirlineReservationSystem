@@ -39,7 +39,7 @@ function Home() {
   return (
     <div className="card">
       <h1>Homepage </h1>
-      <h2>Welcome to xxx airlines</h2>
+      <h2>Welcome to SSO reservation system! </h2>
       <div>
         <div>
           <h2>{"Please sign in or register"} </h2>
