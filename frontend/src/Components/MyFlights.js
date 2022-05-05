@@ -7,6 +7,16 @@ import Table from "./Table.component";
 import { UserContext } from "../contexts/user.context";
 
 function MyFlights() {
+  if (localStorage.getItem("loggedIn") === "false") {
+    console.log("not logged in!");
+    alert("you are not logged in");
+    navigate("/home");
+    return (
+      <Link to="/home">
+        <button className="btn">Go back to Home</button>
+      </Link>
+    );
+  }
   function handleEvent(event) {
     console.log("targetname", event.target.name);
     setDetails({ ...formDetails, [event.target.name]: event.target.value }); //happening in the background

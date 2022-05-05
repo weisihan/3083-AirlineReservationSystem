@@ -5,6 +5,16 @@ import axios from "axios";
 
 function NewAirplane() {
   let navigate = useNavigate();
+  if (localStorage.getItem("loggedIn") === "false") {
+    console.log("not logged in!");
+    alert("you are not logged in");
+    navigate("/home");
+    return (
+      <Link to="/home">
+        <button className="btn">Go back to Home</button>
+      </Link>
+    );
+  }
 
   const [details, setDetails] = useState({
     airplane_id: "",

@@ -173,6 +173,7 @@ app.post("/mostfrequent", (req, res) => {
       if (!err) {
         // send the email of the customer with the most purchases
         customoer_email = rows[0].email;
+        all_flights = [];
         // search the customer information from the customer table
         connection.query(
           `SELECT email, cust_name, DOB 

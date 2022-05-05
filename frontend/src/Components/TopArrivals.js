@@ -11,7 +11,7 @@ function TopArrivals() {
     company: "",
   });
 
-  details.company = airlineName;
+  airline_name.company = airlineName;
   useEffect(() => {
     async function fetchData() {
       //console.log(airline_name);

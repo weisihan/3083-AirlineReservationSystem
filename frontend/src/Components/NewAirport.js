@@ -27,6 +27,16 @@ function NewFlight() {
     //     return;
     //   }
     // }
+    if (localStorage.getItem("loggedIn") === "false") {
+      console.log("not logged in!");
+      alert("you are not logged in");
+      navigate("/home");
+      return (
+        <Link to="/home">
+          <button className="btn">Go back to Home</button>
+        </Link>
+      );
+    }
 
     const res = await axios.post("http://localhost:3001/newairport", details);
 
