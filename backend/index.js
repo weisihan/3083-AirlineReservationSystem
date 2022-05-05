@@ -335,6 +335,10 @@ app.post("/stafflogin", (req, res) => {
         currUser = req.body.username;
         currRole = "staff";
         return;
+      }
+    }
+  }
+});
 app.post("/money", (req, res) => {
   connection.query(
     `SELECT *
