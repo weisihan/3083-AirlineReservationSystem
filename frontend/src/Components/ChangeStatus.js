@@ -6,6 +6,15 @@ import axios from "axios";
 import { UserContext } from "../contexts/user.context";
 
 function ChangeStatus() {
+  if (localStorage.getItem("loggedIn") === "false") {
+    console.log("not logged in!");
+    alert("you are not logged in");
+    navigate("/home");
+    return (
+      <Link to="/home">
+        <button className="btn">Go back to Home</button>
+      </Link>
+    );
   let navigate = useNavigate();
 
   const [details, setDetails] = useState({

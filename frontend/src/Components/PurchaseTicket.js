@@ -17,6 +17,17 @@ function PurchaseTicket(props) {
     expDate: "",
     email: currentUser,
   });
+
+  if (localStorage.getItem("loggedIn") === "false") {
+    console.log("not logged in!");
+    alert("you are not logged in");
+    return (
+      <Link to="/home">
+        <button className="btn">Go back to Home</button>
+      </Link>
+    );
+  }
+
   // Create a handle event function
   const handleEvent = (event) => {
     const name = event.target.name;
