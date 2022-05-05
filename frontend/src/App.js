@@ -24,6 +24,14 @@ import NewAirplane from "./Components/NewAirplane";
 import NewAirport from "./Components/NewAirport";
 import ViewFeedback from "./Components/ViewFeedback";
 import ViewReport from "./Components/ViewReport";
+import Mostfrequent from "./Components/Mostfrequent";
+import TopArrivals from "./Components/TopArrivals";
+import TicketsSold from "./Components/TicketsSold";
+import TicketsMonth from "./Components/TicketMonth";
+import ShowRevenue from "./Components/ShowRevenue";
+import ShowRevenueMonth from "./Components/ShowRevenueMonth";
+import ShowRevenueEconomy from "./Components/ShowRevenueEconomy";
+import ShowRevenueBusiness from "./Components/ShowRevenueBusiness";
 
 import { Outlet } from "react-router-dom";
 import Stack from "@mui/material/Stack";
@@ -96,6 +104,20 @@ function App() {
             <Route path="/newairport" element={<NewAirport />} />
             <Route path="/viewfeedback" element={<ViewFeedback />} />
             <Route path="/viewreport" element={<ViewReport />} />
+            <Route path="/mostfrequent" element={<Mostfrequent />} />
+            <Route path="/toparrivals" element={<TopArrivals />} />
+            <Route path="/ticketsold" element={<TicketsSold />} />
+            <Route path="/ticketmonth" element={<TicketsMonth />} />
+            <Route path="/showrevenue" element={<ShowRevenue />} />
+            <Route path="/showrevenuemonth" element={<ShowRevenueMonth />} />
+            <Route
+              path="/showrevenueeconomy"
+              element={<ShowRevenueEconomy />}
+            />
+            <Route
+              path="/showrevenuebusiness"
+              element={<ShowRevenueBusiness />}
+            />
 
             <Route path="/" element={<RegisterLayout />}>
               <Route path="/register" element={<Register />} />

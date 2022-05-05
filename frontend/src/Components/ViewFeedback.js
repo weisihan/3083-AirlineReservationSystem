@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Table from "./Table.component";
 
 function ViewFeedback() {
   let navigate = useNavigate();
@@ -12,6 +13,7 @@ function ViewFeedback() {
     dept_time: "",
     airline_name: "",
   });
+  const [feedbackResult, setFeedbackResult] = useState([]);
 
   async function View() {
     for (const item in feedbackData) {
@@ -20,19 +22,28 @@ function ViewFeedback() {
         return;
       }
     }
-    const res = await axios.post(
+    let res = await axios.post(
       "http://localhost:3001/viewfeedback",
       feedbackData
     );
+    res = res.data;
     console.log(res);
     alert("Successful");
-    navigate("/feedback");
+    let result = [];
+
+    for (let i = 0; i < res.length; i++) {
+      let temp = [res[i].comment, res[i].rating];
+      result.push(temp);
+    }
+    console.log(result);
+    //navigate("/feedback");
+    setFeedbackResult(result);
   }
+  let heading = ["comment", "rating"];
 
   return (
     <div className="card">
       <h1>View feedback </h1>
-
       <div className="form-inner">
         <div className="form-group">
           <label htmlFor="flight_num"> Flight Number: </label>
@@ -85,7 +96,7 @@ function ViewFeedback() {
       </div>
       <br></br>
       <div className="actions">
-        <button className="btn" onClick={View}>
+        <button className="btn" onClick={() => View()}>
           {""}
           View
           {""}
@@ -94,6 +105,11 @@ function ViewFeedback() {
           <button className="btn">Go to staff home</button>
         </Link>
       </div>
+      <br></br>
+      <div>Comment and Rating: </div>
+      <br></br>
+      {/* <div>{feedbackResult}</div> */}
+      <Table heading={heading} body={feedbackResult} />
     </div>
   );
 }
