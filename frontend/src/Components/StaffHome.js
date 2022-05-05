@@ -20,6 +20,11 @@ function StaffHome() {
     console.log("not logged in!");
     alert("you are not logged in");
     navigate("/home");
+    return (
+      <Link to="/home">
+        <button className="btn">Go back to Home</button>
+      </Link>
+    );
   }
 
   return (

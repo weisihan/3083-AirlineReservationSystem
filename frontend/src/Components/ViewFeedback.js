@@ -13,6 +13,16 @@ function ViewFeedback() {
     airline_name: "",
   });
 
+  if (localStorage.getItem("loggedIn") === "false") {
+    console.log("not logged in!");
+    alert("you are not logged in");
+    navigate("/home");
+    return (
+      <Link to="/home">
+        <button className="btn">Go back to Home</button>
+      </Link>
+    );
+  }
   async function View() {
     for (const item in feedbackData) {
       if (feedbackData[item] === "") {

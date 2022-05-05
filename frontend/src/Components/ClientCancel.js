@@ -15,6 +15,16 @@ function Cancel() {
     email: currentUser,
   });
 
+  if (localStorage.getItem("loggedIn") === "false") {
+    console.log("not logged in!");
+    alert("you are not logged in");
+    navigate("/home");
+    return (
+      <Link to="/home">
+        <button className="btn">Go back to Home</button>
+      </Link>
+    );
+  }
   async function sendRequest(formDetails) {
     let res = await axios.post(
       "http://localhost:3001/clientcancel",
