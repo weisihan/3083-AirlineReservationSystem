@@ -695,7 +695,7 @@ app.post("/clientlogin", (req, res) => {
   );
 });
 app.post("/clientView", (req, res) => {
-  // console.log("clientView", req.body);
+  console.log("clientView", req.body);
   if (req.body.airline_name) {
     connection.query(
       `SELECT *

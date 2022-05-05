@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Home from "../Router/Home/Home";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { UserContext } from "../contexts/user.context";
 
 function StaffLog(props) {
   let navigate = useNavigate();
+  const { setAirline, airlineName } = useContext(UserContext);
 
   const [details, setDetails] = useState({
     username: "",
     staff_password: "",
+    company_name: "",
   });
 
   async function LoggedIn() {
@@ -28,6 +31,7 @@ function StaffLog(props) {
 
     if (resBody) {
       console.log("you are logged in");
+      setAirline(details.company_name);
       navigate("/staffhome");
     } else {
       alert("wrong username or password");
@@ -60,6 +64,18 @@ function StaffLog(props) {
               setDetails({ ...details, staff_password: e.target.value })
             }
             value={details.staff_password}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="company_name"> Company Name: </label>
+          <input
+            type="text"
+            name="company_name"
+            id="company_name"
+            onChange={(e) =>
+              setDetails({ ...details, company_name: e.target.value })
+            }
+            value={details.company_name}
           />
         </div>
         <br></br>

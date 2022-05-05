@@ -39,6 +39,7 @@ function PurchaseTicket(props) {
     // console.log(purchaseInfo);
     axios.post("http://localhost:3001/clientPurchaseTicket", purchaseInfo);
   }
+  alert("Purchase Successful!");
 
   return (
     <div className="card">

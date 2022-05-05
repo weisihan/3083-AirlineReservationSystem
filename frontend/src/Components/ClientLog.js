@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Home from "../Router/Home/Home";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { UserContext } from "../contexts/user.context";
 
 function ClientLog(props) {
   let navigate = useNavigate();
+  const { setCurrentUser, currentUser } = useContext(UserContext);
 
   const [details, setDetails] = useState({
     email: "",
@@ -30,6 +32,7 @@ function ClientLog(props) {
     if (res) {
       console.log("you are logged in");
       navigate("/clienthome");
+      setCurrentUser(details.email);
     } else {
       alert("wrong username or password");
     }

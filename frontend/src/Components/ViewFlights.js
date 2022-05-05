@@ -6,13 +6,12 @@ import { UserContext } from "../contexts/user.context";
 
 function ViewFlights() {
   const [flightData, setFlightData] = useState([]);
-  const { metaData } = useContext(UserContext);
-  const { airline_name } = metaData;
+  const { airlineName } = useContext(UserContext);
   useEffect(() => {
     async function fetchData() {
-      console.log(airline_name);
+      console.log(airlineName);
       let flights = await axios.post("http://localhost:3001/viewflight", {
-        airline_name,
+        airlineName,
       });
       flights = flights.data;
       console.log(flights);
