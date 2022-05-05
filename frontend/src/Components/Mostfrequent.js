@@ -7,13 +7,18 @@ import { UserContext } from "../contexts/user.context";
 function MostFrequent() {
   const [freqCustomer, setFreqCustomer] = useState([]);
   const { airlineName } = useContext(UserContext);
-  const { airline_name } = airlineName;
+  const [airline_name, setDetails] = useState({
+    company: "",
+  });
+
+  airline_name.company = airlineName;
   useEffect(() => {
     async function fetchData() {
       console.log(airline_name);
-      let freqcus = await axios.post("http://localhost:3001/mostfrequent", {
-        airline_name,
-      });
+      let freqcus = await axios.post(
+        "http://localhost:3001/mostfrequent",
+        airline_name
+      );
 
       freqcus = freqcus.data;
       console.log(freqcus);

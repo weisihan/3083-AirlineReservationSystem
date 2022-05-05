@@ -100,7 +100,7 @@ app.post("/ticketsold", (req, res) => {
   // select all the flight data
   console.log(req.body);
   console.log(todayDate);
-  const airline_name = req.body.airline_name;
+  const airline_name = req.body.company;
   // future 30 days
   connection.query(
     `SELECT * FROM Ticket WHERE airline_name = '${airline_name}'`,
@@ -128,7 +128,7 @@ app.post("/ticketmonth", (req, res) => {
   todayDate = moment(todayDate).add(0, "days");
   console.log(req.body);
   console.log(todayDate);
-  const airline_name = req.body.airline_name;
+  const airline_name = req.body.company;
   connection.query(
     `SELECT * FROM Ticket WHERE airline_name = '${airline_name}'`,
     (err, rows) => {
@@ -151,8 +151,10 @@ app.post("/ticketmonth", (req, res) => {
 
 // get the most frequent customer that took the airline specified in request body
 app.post("/mostfrequent", (req, res) => {
-  const airline_name = req.body.airline_name;
+  console.log(req.body);
+  const airline_name = req.body.company;
   console.log(airline_name);
+  console.log("REQ:: ", req.body);
   // search for all the customers that bought the airline's tickets and count the number of times they bought
   connection.query(
     `SELECT COUNT(*) AS num_of_purchases, Customer.email 
@@ -166,7 +168,7 @@ app.post("/mostfrequent", (req, res) => {
     ) 
     GROUP BY Customer.email 
     ORDER BY num_of_purchases DESC LIMIT 1`,
-    [req.body.airline_name],
+    [req.body.company],
     (err, rows) => {
       if (!err) {
         // send the email of the customer with the most purchases
@@ -183,10 +185,10 @@ app.post("/mostfrequent", (req, res) => {
                 // get all flights of the customer by email
                 "SELECT flight_id FROM Purchase WHERE email = customoer_email",
                 [all_flights],
-                (err, all_flights) => {
+                (err, rows) => {
                   if (!err) {
                     // send the customer information and all the flights
-                    res.send(all_flights);
+                    res.send(rows);
                   } else {
                     res.status(500).send(err);
                     console.log(err);
@@ -211,7 +213,7 @@ app.post("/mostfrequent", (req, res) => {
 
 //temp ---------------
 app.post("/toparrivals", (req, res) => {
-  const airline_name = req.body.airline_name;
+  const airline_name = req.body.company;
   let todayDate = new Date();
   todayDate = moment(todayDate).format("YYYY-MM-DD");
   todayDate = moment(todayDate).add(0, "days");
@@ -224,7 +226,7 @@ app.post("/toparrivals", (req, res) => {
     ORDER BY num_of_purchases DESC
     LIMIT 3
     `,
-    [req.body.airline_name, req.body.start_date, req.body.end_date],
+    [req.body.company, req.body.start_date, req.body.end_date],
     (err, rows) => {
       if (!err) {
         console.log(rows[0]);
@@ -241,7 +243,7 @@ app.post("/toparrivals", (req, res) => {
 });
 
 app.post("/showrevenue", (req, res) => {
-  const airline_name = req.body.airline_name;
+  const airline_name = req.body.company;
   let todayDate = new Date();
   todayDate = moment(todayDate).format("YYYY-MM-DD");
   todayDate = moment(todayDate).add(0, "days");
@@ -250,7 +252,7 @@ app.post("/showrevenue", (req, res) => {
     FROM Ticket
     WHERE Ticket.airline_name = '${airline_name}'
     `,
-    [req.body.airline_name],
+    [req.body.company],
     (err, rows) => {
       if (!err) {
         let filteredRows = rows.filter(
@@ -267,7 +269,7 @@ app.post("/showrevenue", (req, res) => {
 });
 
 app.post("/showrevenuemonth", (req, res) => {
-  const airline_name = req.body.airline_name;
+  const airline_name = req.body.company;
   let todayDate = new Date();
   todayDate = moment(todayDate).format("YYYY-MM-DD");
   todayDate = moment(todayDate).add(0, "days");
@@ -276,7 +278,7 @@ app.post("/showrevenuemonth", (req, res) => {
     FROM Ticket
     WHERE Ticket.airline_name = '${airline_name}'
     `,
-    [req.body.airline_name],
+    [req.body.company],
     (err, rows) => {
       if (!err) {
         let filteredRows = rows.filter(
@@ -293,14 +295,14 @@ app.post("/showrevenuemonth", (req, res) => {
 });
 
 app.post("/showrevenueeconomy", (req, res) => {
-  const airline_name = req.body.airline_name;
+  const airline_name = req.body.company;
   connection.query(
     `SELECT *
     FROM Ticket
     WHERE Ticket.airline_name = '${airline_name}'
     AND Ticket.travel_class = "economy"
     `,
-    [req.body.airline_name],
+    [req.body.company],
     (err, rows) => {
       if (!err) {
         res.send(rows);
@@ -314,14 +316,14 @@ app.post("/showrevenueeconomy", (req, res) => {
 });
 
 app.post("/showrevenuebusiness", (req, res) => {
-  const airline_name = req.body.airline_name;
+  const airline_name = req.body.company;
   connection.query(
     `SELECT *
     FROM Ticket
     WHERE Ticket.airline_name = '${airline_name}'
     AND Ticket.travel_class = "business"
     `,
-    [req.body.airline_name],
+    [req.body.company],
     (err, rows) => {
       if (!err) {
         res.send(rows);

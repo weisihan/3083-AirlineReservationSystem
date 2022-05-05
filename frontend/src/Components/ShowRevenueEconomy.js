@@ -8,12 +8,18 @@ function ShowRevenueEconomy() {
   const [revenueE, showRevenueE] = useState([]);
   const { airlineName } = useContext(UserContext);
   const { airline_name } = airlineName;
+  const [details, setDetails] = useState({
+    company: "",
+  });
+
+  details.company = airlineName;
   useEffect(() => {
     async function fetchData() {
       //console.log(airline_name);
-      let revs = await axios.post("http://localhost:3001/showrevenueeconomy", {
-        airline_name,
-      });
+      let revs = await axios.post(
+        "http://localhost:3001/showrevenueeconomy",
+        details
+      );
 
       revs = revs.data;
       console.log(revs);

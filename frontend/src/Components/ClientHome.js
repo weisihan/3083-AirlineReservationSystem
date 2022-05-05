@@ -32,14 +32,12 @@ function ClientHome() {
       <h2>Welcome to client homepage</h2>
       <div className="actions">
         <Link to="/myflights">
-          <button className="btn">View my flights</button>
+          <button className="btn">View my flights/ Review flights</button>
         </Link>
         <br></br>
         <br></br>
         <Link to="/searchflights">
-          <button className="btn">
-            Search for flights/Purchase Flights/Reivew Flights
-          </button>
+          <button className="btn">Search for flights/ Purchase Flights</button>
         </Link>
         <br></br>
         <br></br>

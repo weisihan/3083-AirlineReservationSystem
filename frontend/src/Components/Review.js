@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../contexts/user.context";
+import { SliderThumb } from "@mui/material";
 
 function Review() {
   const { currentUser } = useContext(UserContext);
@@ -15,12 +16,23 @@ function Review() {
     depTime: "",
     currentUser,
   });
+  if (localStorage.getItem("loggedIn") === "false") {
+    console.log("not logged in!");
+    alert("you are not logged in");
+    navigate("/home");
+    return (
+      <Link to="/home">
+        <button className="btn">Go back to Home</button>
+      </Link>
+    );
+  }
 
   async function sendRequest(formDetails) {
     let res = await axios.post(
       "http://localhost:3001/clientReviewBack",
       formDetails
     );
+    alert("successfully submitted");
   }
   function handleEvent(event) {
     console.log("targetname", event.target.name);

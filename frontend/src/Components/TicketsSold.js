@@ -8,12 +8,20 @@ function TicketsSold() {
   const [ticketsSold, showTicketsSold] = useState([]);
   const { airlineName } = useContext(UserContext);
   const { airline_name } = airlineName;
+
+  const [details, setDetails] = useState({
+    company: "",
+  });
+
+  details.company = airlineName;
+
   useEffect(() => {
     async function fetchData() {
       //console.log(airline_name);
-      let tickets = await axios.post("http://localhost:3001/ticketsold", {
-        airline_name,
-      });
+      let tickets = await axios.post(
+        "http://localhost:3001/ticketsold",
+        details
+      );
 
       tickets = tickets.data;
       console.log(tickets);

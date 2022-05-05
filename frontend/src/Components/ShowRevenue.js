@@ -7,13 +7,18 @@ import { UserContext } from "../contexts/user.context";
 function ShowRevenue() {
   const [revenue, showRevenue] = useState([]);
   const { airlineName } = useContext(UserContext);
-  const { airline_name } = airlineName;
+  const [airline_name, setDetails] = useState({
+    company: "",
+  });
+
+  airline_name.company = airlineName;
   useEffect(() => {
     async function fetchData() {
       //console.log(airline_name);
-      let revs = await axios.post("http://localhost:3001/showrevenue", {
-        airline_name,
-      });
+      let revs = await axios.post(
+        "http://localhost:3001/showrevenue",
+        airline_name
+      );
 
       revs = revs.data;
       console.log(revs);

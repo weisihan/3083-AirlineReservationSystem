@@ -7,13 +7,18 @@ import { UserContext } from "../contexts/user.context";
 function TopArrivals() {
   const [topArrivals, showTopArrivals] = useState([]);
   const { airlineName } = useContext(UserContext);
-  const { airline_name } = airlineName;
+  const [airline_name, setDetails] = useState({
+    company: "",
+  });
+
+  details.company = airlineName;
   useEffect(() => {
     async function fetchData() {
       //console.log(airline_name);
-      let tops = await axios.post("http://localhost:3001/toparrivals", {
-        airline_name,
-      });
+      let tops = await axios.post(
+        "http://localhost:3001/toparrivals",
+        airline_name
+      );
 
       tops = tops.data;
       console.log(tops);
